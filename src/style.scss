@@ -1,0 +1,422 @@
+@use './normalize.scss' as *;
+
+$fontFamily: alibaba-puhuiti, sans-serif;
+
+$color: #212121;
+
+html,
+.wrapper,
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+}
+
+html,
+body {
+    overflow: hidden;
+}
+
+.wrapper {
+    overflow: auto;
+}
+
+.h1 {
+    font-family: $fontFamily;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 30px;
+    letter-spacing: 0.2px;
+    color: $color;
+    .des {
+        font-weight: 400;
+        color: #757575;
+    }
+}
+
+.warehouse_wrap {
+    margin-top: 32px;
+}
+
+.warehouse_total {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    font-family: $fontFamily;
+    letter-spacing: 0.2px;
+    color: #bdbdbd;
+}
+
+.warehouse_totalVal {
+    color: #22a6b3;
+    margin: 0 5px;
+    &.red {
+        color: #ff7745;
+    }
+}
+
+.warehouse_items {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    align-content: flex-start;
+    flex-flow: row wrap;
+    margin-top: 8px;
+    padding-bottom: 24px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #ebebeb;
+    max-height: 178px;
+    overflow: auto;
+    min-height: 100px;
+    > .item {
+        margin-right: 20px;
+        margin-bottom: 16px;
+        &:last-of-type {
+            margin-right: 0;
+        }
+    }
+}
+
+.item {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ebebeb;
+    color: #4d4d4d;
+    font-family: $fontFamily;
+    box-sizing: border-box;
+    font-size: 14px;
+    line-height: 21px;
+    cursor: pointer;
+    letter-spacing: 0.2px;
+    display: inline-flex;
+    touch-action: none;
+    &.gray {
+        background-color: #ebebeb;
+        color: transparent;
+    }
+}
+
+.floating {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ebebeb;
+    color: #4d4d4d;
+    font-family: $fontFamily;
+    box-sizing: border-box;
+    font-size: 14px;
+    line-height: 21px;
+    background-color: #fff;
+    letter-spacing: 0.2px;
+    position: absolute;
+    z-index: 50;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.storageCabinet_row {
+    background: #f9fbfb;
+    border-radius: 10px;
+    padding: 0px 8px 20px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-flow: row wrap;
+    box-sizing: border-box;
+}
+
+.storageCabinet_total {
+    color: #bdbdbd;
+    font-family: $fontFamily;
+    letter-spacing: 0.2px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    margin-top: 32px;
+    margin-bottom: 12px;
+    span {
+        padding: 0 5px;
+
+        color: #22a6b3;
+    }
+}
+
+.storageCabinet_item {
+    width: 166px;
+    height: 180px;
+    background-color: #fff;
+    box-shadow: 0px 2px 8px rgba(26, 26, 26, 0.08), 0px 2px 4px rgba(26, 26, 26, 0.03);
+    border-radius: 6px;
+    padding-top: 8px;
+    padding-bottom: 12px;
+    box-sizing: border-box;
+    margin: 20px 12px 0 12px;
+    flex: 0 0 auto;
+    border: 1px solid #fff;
+    transition: all 0.2s linear;
+    &.active {
+        border-color: #22a6b3;
+        border-style: dashed;
+        background-color: #e9f7f8;
+    }
+}
+
+.storageCabinet_itemTitle {
+    color: #bdbdbd;
+    letter-spacing: 0.2px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    font-family: $fontFamily;
+    margin-bottom: 16px;
+    padding-left: 12px;
+    box-sizing: border-box;
+}
+
+.mobileScroll {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    padding: 0 12px;
+    box-sizing: border-box;
+}
+
+.storageCabinet_itemValues {
+    width: 100%;
+    height: calc(100% - 21px - 16px);
+    .item {
+        // margin-right: 16px;
+        margin: 0 8px 12px 8px;
+        // margin-bottom: 12px;
+        &:last-of-type {
+            margin-right: 0;
+        }
+    }
+}
+
+.scroll_scrollBody {
+    padding: 0 6px;
+}
+
+.scroll_scrollBar__vertical {
+    right: 4px;
+}
+
+.warehouse_placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #bdbdbd;
+    font-family: $fontFamily;
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0.2px;
+    line-height: 21px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.storageCabinet_wrap {
+    &.tablet {
+        .storageCabinet_item {
+            width: calc(calc(100% - 24px * 3) / 3);
+            height: 180px;
+        }
+    }
+    &.mobile {
+        .storageCabinet_item {
+            width: 138px;
+            height: 180px;
+            margin: 0 10px;
+        }
+    }
+
+    &.small_desk {
+        .storageCabinet_total {
+            margin-bottom: 16px;
+        }
+
+        .storageCabinet_item {
+            width: 141px;
+            height: 180px;
+        }
+    }
+}
+
+.small_desk {
+    position: relative;
+}
+
+.arrowContainer {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+@mixin circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid #67cdd6;
+    background: #f7feff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: row nowrap;
+    cursor: pointer;
+    user-select: none;
+    box-sizing: border-box;
+}
+
+.arrowContainer_pre {
+    margin-right: 16px;
+    @include circle();
+    transform: rotate(180deg);
+    &.gray {
+        background-color: transparent;
+        border-color: #ebebeb;
+        cursor: inherit;
+        .arrowContainer_icon {
+            color: #ebebeb;
+        }
+    }
+}
+
+.arrowContainer_next {
+    @include circle();
+    &.gray {
+        background-color: transparent;
+        border-color: #ebebeb;
+        cursor: inherit;
+        .arrowContainer_icon {
+            color: #ebebeb;
+        }
+    }
+}
+
+.arrowContainer_icon {
+    font-size: 12px;
+    color: #22a6b3;
+}
+
+.smallDesk_scrollWrap {
+    background: #f9fbfb;
+    border-radius: 10px;
+    .scroll_scrollBar__horizontal {
+        border-radius: 10px;
+    }
+    .scroll_scrollBar__vertical {
+        border-radius: 10px;
+    }
+}
+
+.smallDesk_scrollBody {
+    padding: 0px 8px 20px 8px;
+    box-sizing: border-box;
+}
+
+.storageCabinet_smallDeskRow {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-flow: row nowrap;
+}
+
+.tablet_colorContainer {
+    width: 100%;
+    overflow: hidden;
+    background: #fafafa;
+    border-radius: 10px;
+    padding: 0 8px 20px 8px;
+    box-sizing: border-box;
+}
+
+.tablet_colorContent {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-flow: row nowrap;
+}
+
+.tablet_colorList {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    flex: 0 0 auto;
+    .storageCabinet_item {
+        list-style: none;
+    }
+}
+
+.tablet_page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: row nowrap;
+    width: 100%;
+    margin-top: 24px;
+}
+
+.tablet_row {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-flow: row nowrap;
+}
+
+.tablet_pageItem {
+    width: 16px;
+    height: 6px;
+    display: inline-block;
+    background: #ebebeb;
+    border-radius: 10px;
+    margin-right: 8px;
+    transition: all 0.5s linear;
+    cursor: pointer;
+    &:last-child {
+        margin: 0;
+    }
+    &.active {
+        width: 40px;
+        background: #bdbdbd;
+        opacity: 0.8;
+    }
+}
+
+.transition {
+    transition-duration: 600ms;
+    transition-property: transform;
+}
+
+.mobile_colorWrap {
+    width: 100%;
+    height: 212px;
+    overflow: auto;
+}
+
+.mobile_colorContainer {
+    width: auto;
+    height: 212px;
+    background: #fafafa;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-flow: row nowrap;
+    padding: 16px 6px;
+    box-sizing: border-box;
+}
