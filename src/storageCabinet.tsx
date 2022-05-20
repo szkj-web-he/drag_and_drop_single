@@ -1,16 +1,11 @@
 /* <------------------------------------ **** DEPENDENCE IMPORT START **** ------------------------------------ */
 /** This section will include all the necessary dependence for this tsx file */
 import React, { useEffect, useState } from "react";
-import { updateStateListener } from "./boilerplate";
 import { useMContext } from "./context";
-import { ConfigYML } from "@possie-engine/dr-plugin-sdk/config/yml";
-import { PluginComms } from "@possie-engine/dr-plugin-sdk/pluginComms";
+import { comms } from ".";
 /* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
 /* <------------------------------------ **** INTERFACE START **** ------------------------------------ */
 /** This section will include all the interface for this tsx file */
-const comms = new PluginComms({ defaultConfig: new ConfigYML() });
-
-const options = comms.getConfigNode("options")[0] as Array<OptionProps>;
 
 // const colors = options.map(item => { const key = Object.keys(item)[0]; return item[key] });
 
@@ -43,7 +38,7 @@ export const StorageCabinet: React.FC<StorageCabinetProps> = ({ handleChange, va
     const [is375, setIs375] = useState(window.matchMedia("(max-width: 703px)").matches);
 
     const [list, setList] = useState<Array<ListItemProps>>(
-        deepCloneData(options).map((item) => ({
+        deepCloneData(comms.config.options[0]).map((item) => ({
             code: item.code,
             content: item.content,
         })),
@@ -74,7 +69,7 @@ export const StorageCabinet: React.FC<StorageCabinetProps> = ({ handleChange, va
         for (let i = 0; i < res.length; i++) {
             data[res[i].code] = res[i].value?.code;
         }
-        updateStateListener(data);
+        comms.state = data;
     };
 
     let classStr = "storageCabinet_wrap";

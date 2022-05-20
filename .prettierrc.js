@@ -7,4 +7,7 @@ module.exports = {
     endOfLine: "lf",
     eslintIntegration: true,
     stylelintIntegration: true,
+    options: {
+        editorconfig: true,
+    },
 };

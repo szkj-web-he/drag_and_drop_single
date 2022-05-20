@@ -74,7 +74,7 @@ export const Desk: React.FC<DeskProps> = ({ colors, handleChange, value, handleC
 
     const handleUp = (n: number) => {
         const data = mouseUpOnStorage.current;
-
+        handleChange(undefined);
         if (n === data?.index) {
             return;
         }
@@ -82,7 +82,6 @@ export const Desk: React.FC<DeskProps> = ({ colors, handleChange, value, handleC
         arr[n].value = undefined;
 
         handleColorChange([...listRef.current]);
-        handleChange(undefined);
     };
 
     return (

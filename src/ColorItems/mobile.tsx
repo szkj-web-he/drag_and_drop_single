@@ -10,7 +10,7 @@ export const Mobile: React.FC<DeskProps> = ({ colors, handleChange, value, handl
 
     const handleUp = (n: number) => {
         const data = mouseUpOnStorage.current;
-
+        handleChange(undefined);
         if (n === data?.index) {
             return;
         }
@@ -19,7 +19,6 @@ export const Mobile: React.FC<DeskProps> = ({ colors, handleChange, value, handl
         arr[n].value = undefined;
 
         handleColorChange([...arr]);
-        handleChange(undefined);
     };
 
     useLayoutEffect(() => {

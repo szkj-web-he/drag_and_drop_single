@@ -142,7 +142,7 @@ export const SmallDesk: React.FC<DeskProps> = ({
 
     const handleUp = (n: number) => {
         const data = mouseUpOnStorage.current;
-
+        handleChange(undefined);
         if (n === data?.index) {
             return;
         }
@@ -151,7 +151,6 @@ export const SmallDesk: React.FC<DeskProps> = ({
         arr[n].value = undefined;
 
         handleColorChange([...arr]);
-        handleChange(undefined);
     };
 
     return (

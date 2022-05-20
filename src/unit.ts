@@ -45,7 +45,7 @@ export const getTransitionAttr = (
 };
 
 /**
- * 新增class
+ * æ°å¢class
  */
 export const addClass = (el: HTMLElement, c: string): void => {
     const classNameList = el.getAttribute("class")?.split(" ");
@@ -60,7 +60,7 @@ export const addClass = (el: HTMLElement, c: string): void => {
 };
 
 /**
- * 移出class
+ * ç§»åºclass
  */
 
 export const removeClass = (el: HTMLElement, c: string): void => {
