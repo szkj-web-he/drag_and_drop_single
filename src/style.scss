@@ -55,6 +55,7 @@ body {
 .warehouse_totalVal {
     color: #22a6b3;
     margin: 0 5px;
+
     &.red {
         color: #ff7745;
     }
@@ -131,7 +132,8 @@ body {
     position: absolute;
     z-index: 50;
     pointer-events: none;
-    white-space: nowrap;
+    word-wrap: break-word;
+    word-break: break-word;
 }
 
 .storageCabinet_row {

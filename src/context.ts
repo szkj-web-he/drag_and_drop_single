@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { OptionProps } from "./unit";
+import { OptionProps, PointProps } from "./unit";
 
 interface ContextDataProps {
     mouseUpOnStorage: React.MutableRefObject<
@@ -10,19 +10,8 @@ interface ContextDataProps {
         | undefined
     >;
     isMobile: boolean;
-    position?: {
-        x: number;
-        y: number;
-    };
-    setPosition: React.Dispatch<
-        React.SetStateAction<
-            | {
-                  x: number;
-                  y: number;
-              }
-            | undefined
-        >
-    >;
+    position?: PointProps;
+    setPosition: React.Dispatch<React.SetStateAction<PointProps | undefined>>;
 }
 
 const contextData = (): ContextDataProps => ({

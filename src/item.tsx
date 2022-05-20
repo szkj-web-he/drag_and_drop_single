@@ -4,12 +4,12 @@ import React from "react";
 import { useMContext } from "./context";
 import { Product } from "./product";
 import { ScrollComponent } from "./Scroll";
-import { deepCloneData, DragData, OptionProps } from "./unit";
+import { deepCloneData, DragData, HandleChangeFn, OptionProps } from "./unit";
 /* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
 /* <------------------------------------ **** INTERFACE START **** ------------------------------------ */
 /** This section will include all the interface for this tsx file */
 export interface ItemProps {
-    handleChange: (res: DragData | undefined) => void;
+    handleChange: HandleChangeFn;
     value?: DragData;
     values?: OptionProps;
     onUp: (res: OptionProps | undefined) => void;
@@ -20,6 +20,7 @@ export interface ItemProps {
 export const Item: React.FC<ItemProps> = ({ handleChange, value, values, onUp, index }) => {
     /* <------------------------------------ **** STATE START **** ------------------------------------ */
     /************* This section will include this component HOOK function *************/
+
     const { isMobile } = useMContext();
 
     /* <------------------------------------ **** FUNCTION END **** ------------------------------------ */

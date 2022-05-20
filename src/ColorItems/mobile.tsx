@@ -1,4 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef } from "react";
+import { useListenPosition } from "../useListenPosition";
 import { useMContext } from "../context";
 import { Item } from "../item";
 import { DeskProps } from "./desk";
@@ -7,6 +8,8 @@ export const Mobile: React.FC<DeskProps> = ({ colors, handleChange, value, handl
     const listRef = useRef([...colors]);
 
     const { mouseUpOnStorage } = useMContext();
+
+    const ref = useRef<HTMLDivElement | null>(null);
 
     const handleUp = (n: number) => {
         const data = mouseUpOnStorage.current;
@@ -51,9 +54,11 @@ export const Mobile: React.FC<DeskProps> = ({ colors, handleChange, value, handl
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mouseUpOnStorage]);
 
+    useListenPosition(ref);
+
     return (
         <div className="mobile_colorWrap">
-            <div className="mobile_colorContainer">
+            <div className="mobile_colorContainer" ref={ref}>
                 {colors.map((item, n) => {
                     return (
                         <div className="storageCabinet_item" key={item.code} data-i={n}>

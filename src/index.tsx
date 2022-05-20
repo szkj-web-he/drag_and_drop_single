@@ -6,7 +6,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { StorageCabinet } from "./storageCabinet";
 import { Context } from "./context";
 import { isMobile } from "./isMobile";
-import { deepCloneData, DragData, OptionProps } from "./unit";
+import { deepCloneData, DragData, OptionProps, PointProps } from "./unit";
 
 import { ConfigYML } from "@possie-engine/dr-plugin-sdk/config/yml";
 import { PluginComms } from "@possie-engine/dr-plugin-sdk/pluginComms";
@@ -24,10 +24,7 @@ const Main = () => {
 
     const [mobileStatus, setMobileStatus] = useState(isMobile);
 
-    const [position, setPosition] = useState<{
-        x: number;
-        y: number;
-    }>();
+    const [position, setPosition] = useState<PointProps>();
 
     /* <------------------------------------ **** STATE END **** ------------------------------------ */
     /* <------------------------------------ **** PARAMETER START **** ------------------------------------ */
@@ -75,6 +72,8 @@ const Main = () => {
                         style={{
                             left: `${position.x}px`,
                             top: `${position.y}px`,
+                            width: `${position.width}px`,
+                            height: `${position.height}px`,
                         }}
                     >
                         {selectItem?.content}

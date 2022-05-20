@@ -107,3 +107,14 @@ export const deepCloneData = <T>(data: T): T => {
     const d = data ? JSON.parse(JSON.stringify(data)) : undefined;
     return d as T;
 };
+
+export type HandleChangeFn = (res: DragData | undefined) => void;
+
+export interface PointProps {
+    pageX: number;
+    pageY: number;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+}

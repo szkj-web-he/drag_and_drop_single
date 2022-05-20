@@ -4,17 +4,22 @@ import React, { useLayoutEffect, useRef } from "react";
 import { stopSelect } from "./noSelected";
 import { useMContext } from "./context";
 import { getScrollValue } from "./getScrollValue";
-import { DragData, OptionProps } from "./unit";
+import { DragData, HandleChangeFn, OptionProps, PointProps } from "./unit";
 
 /* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
 /* <------------------------------------ **** INTERFACE START **** ------------------------------------ */
 /** This section will include all the interface for this tsx file */
 export interface ProductProps {
     list: Array<OptionProps>;
-    handleChange: (res: DragData | undefined, size: { width: number; height: number }) => void;
+
+    handleChange: HandleChangeFn;
+
     value?: DragData;
+
     placement: "warehouse" | "storageCabinet";
+
     index?: number;
+
     onUp: (res: OptionProps | undefined) => void;
 }
 /* <------------------------------------ **** INTERFACE END **** ------------------------------------ */
@@ -34,11 +39,13 @@ export const Product: React.FC<ProductProps> = ({
 
     const selectedFn = useRef<typeof document.onselectstart>(null);
 
-    const point = useRef({
+    const point = useRef<PointProps>({
         pageX: 0,
         pageY: 0,
         x: 0,
         y: 0,
+        width: 0,
+        height: 0,
     });
 
     const valRef = useRef(value ? { code: value.code, content: value.content } : undefined);
@@ -76,7 +83,9 @@ export const Product: React.FC<ProductProps> = ({
         point.current.pageX = x;
         point.current.pageY = y;
 
-        setPosition({ ...point.current });
+        setPosition({
+            ...point.current,
+        });
     };
 
     // 当鼠标 或者手 弹起时的通用事件
@@ -87,6 +96,8 @@ export const Product: React.FC<ProductProps> = ({
             y: 0,
             pageX: 0,
             pageY: 0,
+            width: 0,
+            height: 0,
         };
 
         setPosition(undefined);
@@ -143,17 +154,11 @@ export const Product: React.FC<ProductProps> = ({
             y: number;
         },
     ) => {
-        handleChange(
-            {
-                code: item.code,
-                content: item.content,
-                placement: placement === "warehouse" ? "warehouse" : { storageCabinet: index || 0 },
-            },
-            {
-                width: e.currentTarget.offsetWidth,
-                height: e.currentTarget.offsetHeight,
-            },
-        );
+        handleChange({
+            code: item.code,
+            content: item.content,
+            placement: placement === "warehouse" ? "warehouse" : { storageCabinet: index || 0 },
+        });
         stopSelect(e, selectedFn, true);
 
         const scrollData = getScrollValue();
@@ -166,6 +171,8 @@ export const Product: React.FC<ProductProps> = ({
             pageY: position.y,
             x: rectX,
             y: rectY,
+            width: e.currentTarget.offsetWidth,
+            height: e.currentTarget.offsetHeight,
         };
         setPosition({
             ...point.current,

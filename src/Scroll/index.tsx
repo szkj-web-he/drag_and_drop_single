@@ -333,11 +333,14 @@ export const ScrollComponent = forwardRef<HTMLDivElement, ScrollProps>(
                     className={bodyClassNameList.join(" ")}
                     style={Object.assign(
                         {},
+
                         style,
+
                         hidden === true ||
                             (typeof hidden === "object" && hidden?.x === true
                                 ? { overflowX: "hidden" }
                                 : {}),
+
                         hidden === true ||
                             (typeof hidden === "object" && hidden?.y === true
                                 ? { overflowY: "hidden" }

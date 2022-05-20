@@ -4,6 +4,7 @@ import { useMContext } from "../context";
 import { Item } from "../item";
 import { addClass, getMatrixAttr, getTransitionAttr, removeClass } from "../unit";
 import { DeskProps } from "./desk";
+import { useListenPosition } from "../useListenPosition";
 
 export const Tablet: React.FC<DeskProps> = ({ colors, handleChange, value, handleColorChange }) => {
     const listRef = useRef([...colors]);
@@ -44,6 +45,8 @@ export const Tablet: React.FC<DeskProps> = ({ colors, handleChange, value, handl
     useLayoutEffect(() => {
         listRef.current = [...colors];
     }, [colors]);
+
+    useListenPosition(ref, "tablet");
 
     /**
      * touch 事件的穿透处理

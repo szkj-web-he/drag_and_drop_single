@@ -3,7 +3,7 @@
 
 import React from "react";
 import { Product } from "./product";
-import { deepCloneData, DragData } from "./unit";
+import { deepCloneData, DragData, HandleChangeFn } from "./unit";
 import { comms } from ".";
 import { useMContext } from "./context";
 import { ScrollComponent } from "./Scroll";
@@ -14,7 +14,7 @@ import { ScrollComponent } from "./Scroll";
 
 /** This section will include all the interface for this tsx file */
 export interface WarehouseProps {
-    handleChange: (res: DragData | undefined) => void;
+    handleChange: HandleChangeFn;
     value?: DragData;
 }
 /* <------------------------------------ **** INTERFACE END **** ------------------------------------ */
@@ -23,6 +23,7 @@ export const Warehouse: React.FC<WarehouseProps> = ({ handleChange, value }) => 
     const { isMobile } = useMContext();
 
     const params = comms.config.options[1];
+
     const handleUp = () => {
         handleChange(undefined);
     };
