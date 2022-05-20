@@ -1,12 +1,6 @@
 /* <------------------------------------ **** DEPENDENCE IMPORT START **** ------------------------------------ */
 /** This section will include all the necessary dependence for this tsx file */
-import React, {
-    forwardRef,
-    useEffect,
-    useLayoutEffect,
-    useRef,
-    useState,
-} from "react";
+import React, { forwardRef, useEffect, useLayoutEffect, useRef, useState } from "react";
 import "./style.scss";
 import { setScrollBar } from "./Unit/setScrollBar";
 import { stopSelect } from "../noSelected";
@@ -63,7 +57,7 @@ export interface ScrollProps extends React.DOMAttributes<HTMLDivElement> {
     /**
      * hidden scrollbar
      */
-    hidden?: boolean | { x: boolean; y: boolean };
+    hidden?: boolean | { x?: boolean; y?: boolean };
     /**
      * Prevent event bubbling when mouse is on the bar
      */
@@ -94,7 +88,7 @@ export const ScrollComponent = forwardRef<HTMLDivElement, ScrollProps>(
             bodyClassName,
             ...props
         },
-        ref
+        ref,
     ) => {
         ScrollComponent.displayName = "ScrollComponent";
         /* <------------------------------------ **** STATE START **** ------------------------------------ */
@@ -266,9 +260,7 @@ export const ScrollComponent = forwardRef<HTMLDivElement, ScrollProps>(
          * 鼠标在纵向滚动条上 按下时
          * @param e
          */
-        const handleMouseDownOnVerticalBar = (
-            e: React.MouseEvent<HTMLDivElement>
-        ) => {
+        const handleMouseDownOnVerticalBar = (e: React.MouseEvent<HTMLDivElement>) => {
             stopSelect(e, selectedFn, stopPropagation);
 
             point.current = e.pageY;
@@ -281,9 +273,7 @@ export const ScrollComponent = forwardRef<HTMLDivElement, ScrollProps>(
          * 鼠标在横向滚动条上 按下时
          * @param e
          */
-        const handleMouseDownOnHorizontalBar = (
-            e: React.MouseEvent<HTMLDivElement>
-        ) => {
+        const handleMouseDownOnHorizontalBar = (e: React.MouseEvent<HTMLDivElement>) => {
             stopSelect(e, selectedFn, stopPropagation);
             setFocus(true);
             point.current = e.pageX;
@@ -296,13 +286,11 @@ export const ScrollComponent = forwardRef<HTMLDivElement, ScrollProps>(
          * 纵向滚动条
          */
         const verticalBar =
-            hidden === true ||
-                (typeof hidden === "object" && hidden?.y === true) ? (
+            hidden === true || (typeof hidden === "object" && hidden?.y === true) ? (
                 <></>
             ) : (
                 <div
-                    className={`scroll_scrollBar__vertical${hover || focus ? " active" : ""
-                        }`}
+                    className={`scroll_scrollBar__vertical${hover || focus ? " active" : ""}`}
                     onMouseDown={handleMouseDownOnVerticalBar}
                     onClick={(e) => stopPropagation && e.stopPropagation()}
                 />
@@ -312,13 +300,11 @@ export const ScrollComponent = forwardRef<HTMLDivElement, ScrollProps>(
          * 横向滚动条
          */
         const horizontalBar =
-            hidden === true ||
-                (typeof hidden === "object" && hidden?.x === true) ? (
+            hidden === true || (typeof hidden === "object" && hidden?.x === true) ? (
                 <></>
             ) : (
                 <div
-                    className={`scroll_scrollBar__horizontal${hover || focus ? " active" : ""
-                        }`}
+                    className={`scroll_scrollBar__horizontal${hover || focus ? " active" : ""}`}
                     onMouseDown={handleMouseDownOnHorizontalBar}
                     onClick={(e) => stopPropagation && e.stopPropagation()}
                 />
@@ -337,11 +323,7 @@ export const ScrollComponent = forwardRef<HTMLDivElement, ScrollProps>(
                 onMouseOver={handleMouseOver}
                 onMouseLeave={handleMouseLeave}
                 ref={ref}
-                style={Object.assign(
-                    {},
-                    width ? { width } : {},
-                    height ? { height } : {}
-                )}
+                style={Object.assign({}, width ? { width } : {}, height ? { height } : {})}
                 {...props}
             >
                 {verticalBar}
@@ -349,14 +331,25 @@ export const ScrollComponent = forwardRef<HTMLDivElement, ScrollProps>(
                 <div
                     ref={scrollEl}
                     className={bodyClassNameList.join(" ")}
-                    style={style}
+                    style={Object.assign(
+                        {},
+                        style,
+                        hidden === true ||
+                            (typeof hidden === "object" && hidden?.x === true
+                                ? { overflowX: "hidden" }
+                                : {}),
+                        hidden === true ||
+                            (typeof hidden === "object" && hidden?.y === true
+                                ? { overflowY: "hidden" }
+                                : {}),
+                    )}
                     onScroll={handleScroll}
                 >
                     {children}
                 </div>
             </div>
         );
-    }
+    },
 );
 ScrollComponent.displayName = "ScrollComponent";
 /* <------------------------------------ **** FUNCTION COMPONENT END **** ------------------------------------ */

@@ -1,4 +1,4 @@
-@use './normalize.scss' as *;
+@use "./normalize.scss" as *;
 
 $fontFamily: alibaba-puhuiti, sans-serif;
 
@@ -6,7 +6,8 @@ $color: #212121;
 
 html,
 .wrapper,
-body {
+body,
+body > div:not([class], [id]) {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -72,14 +73,25 @@ body {
     border-bottom: 1px solid #ebebeb;
     max-height: 178px;
     overflow: auto;
+    overflow-x: hidden;
     min-height: 100px;
-    > .item {
-        margin-right: 20px;
-        margin-bottom: 16px;
-        &:last-of-type {
-            margin-right: 0;
-        }
-    }
+}
+.warehouse_scrollWrap {
+    margin-top: 8px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #ebebeb;
+}
+
+.warehouse_scrollBody {
+    min-height: 100px;
+    max-height: 178px;
+    position: relative;
+    display: flex;
+    padding-bottom: 24px;
+    align-items: center;
+    justify-content: flex-start;
+    align-content: flex-start;
+    flex-flow: row wrap;
 }
 
 .item {
@@ -88,13 +100,17 @@ body {
     border: 1px solid #ebebeb;
     color: #4d4d4d;
     font-family: $fontFamily;
-    box-sizing: border-box;
     font-size: 14px;
     line-height: 21px;
     cursor: pointer;
     letter-spacing: 0.2px;
     display: inline-flex;
     touch-action: none;
+    max-width: 100%;
+    flex: 0 0 auto;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    word-break: break-word;
     &.gray {
         background-color: #ebebeb;
         color: transparent;
@@ -121,9 +137,8 @@ body {
 .storageCabinet_row {
     background: #f9fbfb;
     border-radius: 10px;
-    padding: 0px 8px 20px 8px;
+    padding: 0px 12px 20px 12px;
     display: flex;
-    align-items: center;
     justify-content: flex-start;
     align-items: flex-start;
     flex-flow: row wrap;
@@ -176,6 +191,9 @@ body {
     margin-bottom: 16px;
     padding-left: 12px;
     box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .mobileScroll {
@@ -184,23 +202,21 @@ body {
     overflow: auto;
     padding: 0 12px;
     box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 .storageCabinet_itemValues {
     width: 100%;
     height: calc(100% - 21px - 16px);
     .item {
-        // margin-right: 16px;
-        margin: 0 8px 12px 8px;
-        // margin-bottom: 12px;
-        &:last-of-type {
-            margin-right: 0;
-        }
+        margin-right: 16px;
+
+        margin-bottom: 12px;
     }
 }
 
 .scroll_scrollBody {
-    padding: 0 6px;
+    padding: 0 12px;
 }
 
 .scroll_scrollBar__vertical {
@@ -319,13 +335,12 @@ body {
 }
 
 .smallDesk_scrollBody {
-    padding: 0px 8px 20px 8px;
+    padding: 0px 12px 20px 12px;
     box-sizing: border-box;
 }
 
 .storageCabinet_smallDeskRow {
     display: flex;
-    align-items: center;
     justify-content: flex-start;
     align-items: flex-start;
     flex-flow: row nowrap;
@@ -336,7 +351,7 @@ body {
     overflow: hidden;
     background: #fafafa;
     border-radius: 10px;
-    padding: 0 8px 20px 8px;
+    padding: 0 12px 20px 12px;
     box-sizing: border-box;
 }
 
@@ -417,6 +432,18 @@ body {
     align-items: center;
     justify-content: flex-start;
     flex-flow: row nowrap;
-    padding: 16px 6px;
+    padding: 16px 8px;
     box-sizing: border-box;
+}
+
+.warehouse_body {
+    width: calc(100% + 20px);
+    > .item {
+        margin-right: 20px;
+        margin-bottom: 16px;
+    }
+}
+
+.scrollBody {
+    width: calc(100% + 16px);
 }

@@ -25,25 +25,29 @@ export const Item: React.FC<ItemProps> = ({ handleChange, value, values, onUp, i
     /* <------------------------------------ **** FUNCTION END **** ------------------------------------ */
     return isMobile ? (
         <div className="mobileScroll">
-            <Product
-                list={values ? [deepCloneData(values)] : []}
-                handleChange={handleChange}
-                value={deepCloneData(value)}
-                index={index}
-                onUp={onUp}
-                placement="storageCabinet"
-            />
+            <div className="scrollBody">
+                <Product
+                    list={values ? [deepCloneData(values)] : []}
+                    handleChange={handleChange}
+                    value={deepCloneData(value)}
+                    index={index}
+                    onUp={onUp}
+                    placement="storageCabinet"
+                />
+            </div>
         </div>
     ) : (
-        <ScrollComponent>
-            <Product
-                list={values ? [deepCloneData(values)] : []}
-                handleChange={handleChange}
-                value={deepCloneData(value)}
-                index={index}
-                onUp={onUp}
-                placement="storageCabinet"
-            />
+        <ScrollComponent hidden={{ x: true, y: false }}>
+            <div className="scrollBody">
+                <Product
+                    list={values ? [deepCloneData(values)] : []}
+                    handleChange={handleChange}
+                    value={deepCloneData(value)}
+                    index={index}
+                    onUp={onUp}
+                    placement="storageCabinet"
+                />
+            </div>
         </ScrollComponent>
     );
 };
