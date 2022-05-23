@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useMContext } from "../context";
 import { Item } from "../item";
 import { ScrollComponent } from "../Scroll";
@@ -20,6 +20,8 @@ export const SmallDesk: React.FC<DeskProps> = ({
 
     const scrollEl = useRef<HTMLDivElement | null>(null);
 
+    const [showBtn, setShowBtn] = useState(false);
+
     /**
      * 0 起点
      * 1 终点
@@ -32,6 +34,19 @@ export const SmallDesk: React.FC<DeskProps> = ({
     useLayoutEffect(() => {
         listRef.current = [...colors];
     }, [colors]);
+
+    useEffect(() => {
+        const fn = () => {
+            const el = ref.current;
+            if (!el) return;
+            setShowBtn(el.scrollWidth > el.offsetWidth);
+        };
+        window.addEventListener("resize", fn);
+        fn();
+        return () => {
+            window.removeEventListener("resize", fn);
+        };
+    }, []);
 
     const getScrollEl = () => {
         const el = scrollEl.current;
@@ -127,20 +142,22 @@ export const SmallDesk: React.FC<DeskProps> = ({
 
     return (
         <>
-            <div className="arrowContainer">
-                <div
-                    className={`arrowContainer_pre${scrollStatus === 0 ? " gray" : ""}`}
-                    onClick={toLeft}
-                >
-                    <Icon className="arrowContainer_icon" />
+            {showBtn && (
+                <div className="arrowContainer">
+                    <div
+                        className={`arrowContainer_pre${scrollStatus === 0 ? " gray" : ""}`}
+                        onClick={toLeft}
+                    >
+                        <Icon className="arrowContainer_icon" />
+                    </div>
+                    <div
+                        className={`arrowContainer_next${scrollStatus === 1 ? " gray" : ""}`}
+                        onClick={toRight}
+                    >
+                        <Icon className="arrowContainer_icon" />
+                    </div>
                 </div>
-                <div
-                    className={`arrowContainer_next${scrollStatus === 1 ? " gray" : ""}`}
-                    onClick={toRight}
-                >
-                    <Icon className="arrowContainer_icon" />
-                </div>
-            </div>
+            )}
             <ScrollComponent
                 height="220px"
                 className="smallDesk_scrollWrap"

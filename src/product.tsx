@@ -171,8 +171,8 @@ export const Product: React.FC<ProductProps> = ({
             pageY: position.y,
             x: rectX,
             y: rectY,
-            width: e.currentTarget.offsetWidth,
-            height: e.currentTarget.offsetHeight,
+            width: rect.width,
+            height: rect.height,
         };
         setPosition({
             ...point.current,
@@ -237,9 +237,10 @@ export const Product: React.FC<ProductProps> = ({
                                       handleMouseDown(item, e);
                                   },
                               })}
-                    >
-                        {item.content}
-                    </div>
+                        dangerouslySetInnerHTML={{
+                            __html: item.content,
+                        }}
+                    />
                 );
             })}
         </>

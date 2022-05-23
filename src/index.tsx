@@ -15,7 +15,7 @@ export const comms = new PluginComms({
     defaultConfig: new ConfigYML(),
 });
 
-const Main = () => {
+const Main: React.FC = () => {
     /* <------------------------------------ **** STATE START **** ------------------------------------ */
     /************* This section will include this component HOOK function *************/
     const [selectItem, setSelectItem] = useState<DragData>();
@@ -45,15 +45,21 @@ const Main = () => {
     /************* This section will include this component general function *************/
     /* <------------------------------------ **** FUNCTION END **** ------------------------------------ */
     return (
-        <Context.Provider
-            value={{
-                mouseUpOnStorage: status,
-                isMobile: mobileStatus,
-                position,
-                setPosition,
-            }}
-        >
-            <div className="wrapper">
+        <div className="wrapper">
+            <div
+                className="top"
+                dangerouslySetInnerHTML={{
+                    __html: (comms.config.question as unknown as string) ?? "",
+                }}
+            />
+            <Context.Provider
+                value={{
+                    mouseUpOnStorage: status,
+                    isMobile: mobileStatus,
+                    position,
+                    setPosition,
+                }}
+            >
                 <Warehouse
                     handleChange={(res) => {
                         setSelectItem(deepCloneData(res));
@@ -75,12 +81,13 @@ const Main = () => {
                             width: `${position.width}px`,
                             height: `${position.height}px`,
                         }}
-                    >
-                        {selectItem?.content}
-                    </div>
+                        dangerouslySetInnerHTML={{
+                            __html: selectItem?.content ?? "",
+                        }}
+                    />
                 )}
-            </div>
-        </Context.Provider>
+            </Context.Provider>
+        </div>
     );
 };
 /* <------------------------------------ **** FUNCTION COMPONENT END **** ------------------------------------ */
