@@ -42,6 +42,12 @@ export const Tablet: React.FC<DeskProps> = ({ colors, handleChange, value, handl
         startX: 0,
     });
 
+    const handleColorChangeFn = useRef(handleColorChange);
+
+    useLayoutEffect(() => {
+        handleColorChangeFn.current = handleColorChange;
+    }, [handleColorChange]);
+
     useLayoutEffect(() => {
         listRef.current = [...colors];
     }, [colors]);
@@ -65,7 +71,7 @@ export const Tablet: React.FC<DeskProps> = ({ colors, handleChange, value, handl
                     content: data.val.content,
                 };
 
-                handleColorChange([...arr]);
+                handleColorChangeFn.current([...arr]);
             }
         };
         document.addEventListener("touchend", fn);
@@ -73,7 +79,6 @@ export const Tablet: React.FC<DeskProps> = ({ colors, handleChange, value, handl
         return () => {
             document.removeEventListener("touchend", fn);
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mouseUpOnStorage]);
 
     useEffect(() => {
@@ -374,7 +379,7 @@ export const Tablet: React.FC<DeskProps> = ({ colors, handleChange, value, handl
         const arr = [...listRef.current];
         arr[n].value = undefined;
 
-        handleColorChange([...arr]);
+        handleColorChangeFn.current([...arr]);
     };
 
     return (

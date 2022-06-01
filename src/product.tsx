@@ -117,9 +117,7 @@ export const Product: React.FC<ProductProps> = ({
 
         const position = e.changedTouches[0];
 
-        const x = position.pageX;
-        const y = position.pageY;
-        const els = document.elementsFromPoint(x, y);
+        const els = document.elementsFromPoint(position.clientX, position.clientY);
 
         for (let i = 0; i < els.length; ) {
             const el = els[i];

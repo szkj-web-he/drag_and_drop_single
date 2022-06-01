@@ -11,6 +11,12 @@ export const Mobile: React.FC<DeskProps> = ({ colors, handleChange, value, handl
 
     const ref = useRef<HTMLDivElement | null>(null);
 
+    const handleColorChangeFn = useRef(handleColorChange);
+
+    useLayoutEffect(() => {
+        handleColorChangeFn.current = handleColorChange;
+    }, [handleColorChange]);
+
     const handleUp = (n: number) => {
         const data = mouseUpOnStorage.current;
         handleChange(undefined);
@@ -21,7 +27,7 @@ export const Mobile: React.FC<DeskProps> = ({ colors, handleChange, value, handl
         const arr = [...listRef.current];
         arr[n].value = undefined;
 
-        handleColorChange([...arr]);
+        handleColorChangeFn.current([...arr]);
     };
 
     useLayoutEffect(() => {
@@ -43,7 +49,7 @@ export const Mobile: React.FC<DeskProps> = ({ colors, handleChange, value, handl
                     content: data.val.content,
                 };
 
-                handleColorChange([...arr]);
+                handleColorChangeFn.current([...arr]);
             }
         };
         document.addEventListener("touchend", fn);

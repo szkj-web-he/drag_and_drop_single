@@ -1081,10 +1081,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@possie-engine/dr-plugin-sdk@^0.0.16":
-  version "0.0.16"
-  resolved "https://npm.pkg.github.com/download/@possie-engine/dr-plugin-sdk/0.0.16/fab1d1330eddbae0def0c0d268ec0f72b5d28f9f0bcdfc69e82d37efb05431c1#777b52afbaff6dd2d2b7d50d1f7bfc68828603c4"
-  integrity sha512-cqsn2A1xWQO3Tx4K/Es1SRmRefydIqiz3WBTc9vg1zbfQUfEU9fY+hlwnjYeR1jPa9aFmVajmCFfQZC/0QaJMg==
+"@possie-engine/dr-plugin-sdk@^0.1.4":
+  version "0.1.4"
+  resolved "https://npm.pkg.github.com/download/@possie-engine/dr-plugin-sdk/0.1.4/7b1a74c0bbc6e6fd615d85b13e829fb535895a7321767442ca5dabd257f0225b#53ceffa16ffb61ab19515b9b10375027bd9a2a30"
+  integrity sha512-mXVPR/16jChjdQZCzuBn45u+IdV1wZ1Id/GtO8uP3eKzXPpTOmElb0TjtmB6WRA1wIZwZOV2CxYlT1eimtZ8Ig==
   dependencies:
     dot-object "^2.1.4"
     react "^18"

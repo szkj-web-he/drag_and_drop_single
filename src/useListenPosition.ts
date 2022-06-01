@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useMContext } from "./context";
+import { getScrollValue } from "./getScrollValue";
 
 export const useListenPosition = (
     ref: React.MutableRefObject<HTMLDivElement | null>,
@@ -11,8 +12,13 @@ export const useListenPosition = (
         const fn = () => {
             const rEl = ref.current;
             if (!rEl) return;
-
-            const els = position ? document.elementsFromPoint(position.pageX, position.pageY) : [];
+            const scrollData = getScrollValue();
+            const els = position
+                ? document.elementsFromPoint(
+                      position.pageX - scrollData.x,
+                      position.pageY - scrollData.y,
+                  )
+                : [];
 
             const findChild = (el: HTMLElement) => {
                 const childList = el.children;

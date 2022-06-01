@@ -38,10 +38,12 @@ export const StorageCabinet: React.FC<StorageCabinetProps> = ({ handleChange, va
     const [is375, setIs375] = useState(window.matchMedia("(max-width: 703px)").matches);
 
     const [list, setList] = useState<Array<ListItemProps>>(
-        deepCloneData(comms.config.options[0]).map((item) => ({
-            code: item.code,
-            content: item.content,
-        })),
+        comms.config.options
+            ? deepCloneData(comms.config.options[0]).map((item) => ({
+                  code: item.code,
+                  content: item.content,
+              }))
+            : [],
     );
 
     /* <------------------------------------ **** STATE END **** ------------------------------------ */
@@ -116,6 +118,8 @@ export const StorageCabinet: React.FC<StorageCabinetProps> = ({ handleChange, va
         classStr += is375 ? " mobile" : " tablet";
     } else if (is1024) {
         classStr += " small_desk";
+    } else {
+        classStr += " desk";
     }
     /* <------------------------------------ **** FUNCTION END **** ------------------------------------ */
     return (

@@ -22,7 +22,7 @@ export interface WarehouseProps {
 export const Warehouse: React.FC<WarehouseProps> = ({ handleChange, value }) => {
     const { isMobile } = useMContext();
 
-    const params = comms.config.options[1];
+    const params = comms.config.options?.[1] || [];
 
     const handleUp = () => {
         handleChange(undefined);

@@ -4,6 +4,18 @@ $fontFamily: alibaba-puhuiti, sans-serif;
 
 $color: #212121;
 
+$span: calc(calc(100vw - 20px * 2 - 11 * 24px) / 12);
+
+@mixin gridCol($val) {
+    width: calc(calc($span * $val) + calc(($val - 1) * 24px));
+}
+
+$mobileSpan: calc(calc(100vw - 16px * 2 - 11 * 20px) / 12);
+
+@mixin mobileGridCol($val) {
+    width: calc($mobileSpan * $val + calc($val - 1) * 20px);
+}
+
 html,
 .wrapper,
 body,
@@ -21,25 +33,29 @@ body {
 }
 
 .wrapper {
-    overflow: auto;
+    background-color: #fff;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-flow: column nowrap;
+    &:not(.mobile) {
+        overflow: hidden;
+    }
 }
 
-.h1 {
-    font-family: $fontFamily;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 30px;
-    letter-spacing: 0.2px;
-    color: $color;
-    .des {
-        font-weight: 400;
-        color: #757575;
+@media screen and (max-width: 1000px) {
+    .wrapper {
+        &:not(.mobile) {
+            overflow: auto;
+        }
     }
 }
 
 .warehouse_wrap {
     margin-top: 32px;
+    width: 100%;
+    flex: 0 0 auto;
 }
 
 .warehouse_total {
@@ -77,10 +93,14 @@ body {
     overflow-x: hidden;
     min-height: 100px;
 }
+
 .warehouse_scrollWrap {
     margin-top: 8px;
     box-sizing: border-box;
     border-bottom: 1px solid #ebebeb;
+    &.scroll_scrollContainer {
+        height: auto;
+    }
 }
 
 .warehouse_scrollBody {
@@ -112,6 +132,7 @@ body {
     word-wrap: break-word;
     word-break: break-word;
     white-space: pre-wrap;
+    flex-flow: row wrap;
 }
 
 .item {
@@ -147,7 +168,7 @@ body {
 .storageCabinet_row {
     background: #f9fbfb;
     border-radius: 10px;
-    padding: 0px 12px 20px 12px;
+    padding: 20px;
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
@@ -172,7 +193,7 @@ body {
 }
 
 .storageCabinet_item {
-    width: 166px;
+    @include gridCol(2);
     height: 180px;
     background-color: #fff;
     box-shadow: 0px 2px 8px rgba(26, 26, 26, 0.08), 0px 2px 4px rgba(26, 26, 26, 0.03);
@@ -180,7 +201,7 @@ body {
     padding-top: 8px;
     padding-bottom: 12px;
     box-sizing: border-box;
-    margin: 20px 12px 0 12px;
+    margin-left: 24px;
     flex: 0 0 auto;
     border: 1px solid #fff;
     transition: all 0.2s linear;
@@ -188,6 +209,9 @@ body {
         border-color: #22a6b3;
         border-style: dashed;
         background-color: #e9f7f8;
+    }
+    &:first-child {
+        margin-left: 0;
     }
 }
 
@@ -250,18 +274,43 @@ body {
     left: 0;
 }
 
+.storageCabinet_deskScrollWrap {
+    height: calc(100% - 65px) !important;
+}
+
 .storageCabinet_wrap {
+    width: 100%;
+    flex: 1 1 auto;
+    overflow: hidden;
+    &.desk {
+        .storageCabinet_row {
+            padding: 0 8px 20px 8px;
+        }
+        .storageCabinet_item {
+            margin: 20px 12px 0 12px;
+        }
+    }
+
     &.tablet {
         .storageCabinet_item {
-            width: calc(calc(100% - 24px * 3) / 3);
+            @include gridCol(4);
             height: 180px;
+            margin-right: 24px;
+            margin-left: 0;
+            margin-top: 20px;
+            &:nth-child(3n) {
+                margin-right: 0;
+            }
         }
     }
     &.mobile {
         .storageCabinet_item {
-            width: 138px;
+            @include mobileGridCol(6);
             height: 180px;
-            margin: 0 10px;
+            margin-left: 20px;
+            &:first-of-type {
+                margin-left: 0;
+            }
         }
     }
 
@@ -271,7 +320,7 @@ body {
         }
 
         .storageCabinet_item {
-            width: 141px;
+            @include gridCol(3);
             height: 180px;
         }
     }
@@ -283,7 +332,7 @@ body {
 
 .arrowContainer {
     position: absolute;
-    top: 0;
+    top: 32px;
     right: 0;
 }
 
@@ -345,7 +394,7 @@ body {
 }
 
 .smallDesk_scrollBody {
-    padding: 0px 12px 20px 12px;
+    padding: 20px;
     box-sizing: border-box;
 }
 
@@ -379,7 +428,7 @@ body {
     align-items: flex-start;
     align-content: flex-start;
     margin: 0;
-    padding: 0;
+    padding: 0 20px 20px;
     width: 100%;
     flex: 0 0 auto;
     .storageCabinet_item {
@@ -435,6 +484,7 @@ body {
 
 .mobile_colorContainer {
     width: auto;
+    min-width: 100%;
     height: 212px;
     background: #fafafa;
     border-radius: 10px;
@@ -442,7 +492,7 @@ body {
     align-items: center;
     justify-content: flex-start;
     flex-flow: row nowrap;
-    padding: 16px 8px;
+    padding: 16px;
     box-sizing: border-box;
 }
 
@@ -458,7 +508,16 @@ body {
     width: calc(100% + 16px);
 }
 
-.top {
+.question {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-flow: row wrap;
+    width: 100%;
+    flex: 0 0 auto;
+}
+
+.questionContent {
     color: #212121;
     font-family: $fontFamily;
     font-style: normal;
@@ -466,5 +525,52 @@ body {
     font-size: 20px;
     line-height: 30px;
     letter-spacing: 0.2px;
-    margin-bottom: 32px;
+}
+
+.questionDes {
+    color: #757575;
+    font-family: $fontFamily;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 30px;
+    letter-spacing: 0.2px;
+}
+
+@mixin tipsMask {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 48px;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: row nowrap;
+    transition: all 0.2s linear;
+}
+
+.storageCabinet_deskTopTips {
+    @include tipsMask();
+    top: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(51, 51, 51, 0.2) -64.58%,
+        rgba(51, 51, 51, 0.05) 135.42%
+    );
+    border-radius: 6px 6px 0px 0px;
+    .storageCabinet_img {
+        transform: rotate(180deg);
+    }
+}
+
+.storageCabinet_deskBottomTips {
+    @include tipsMask();
+    bottom: 0;
+    background: linear-gradient(
+        360deg,
+        rgba(51, 51, 51, 0.2) -64.58%,
+        rgba(51, 51, 51, 0.05) 135.42%
+    );
+    border-radius: 0px 0px 6px 6px;
 }
