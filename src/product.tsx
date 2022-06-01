@@ -1,10 +1,12 @@
 /* <------------------------------------ **** DEPENDENCE IMPORT START **** ------------------------------------ */
 /** This section will include all the necessary dependence for this tsx file */
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { stopSelect } from "./noSelected";
 import { useMContext } from "./context";
 import { getScrollValue } from "./getScrollValue";
 import { DragData, HandleChangeFn, OptionProps, PointProps } from "./unit";
+import spider from "./Assets/svg/spider.svg";
+import pumpkin from "./Assets/svg/pumpkin.svg";
 
 /* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
 /* <------------------------------------ **** INTERFACE START **** ------------------------------------ */
@@ -50,6 +52,8 @@ export const Product: React.FC<ProductProps> = ({
 
     const valRef = useRef(value ? { code: value.code, content: value.content } : undefined);
 
+    const timer = useRef<number>();
+
     /* <------------------------------------ **** STATE END **** ------------------------------------ */
     /* <------------------------------------ **** PARAMETER START **** ------------------------------------ */
     /************* This section will include this component parameter *************/
@@ -58,38 +62,54 @@ export const Product: React.FC<ProductProps> = ({
         valRef.current = value ? { code: value.code, content: value.content } : undefined;
     }, [value]);
 
+    useEffect(() => {
+        return () => {
+            timer.current && window.clearTimeout(timer.current);
+            timer.current = undefined;
+        };
+    }, []);
+
     /* <------------------------------------ **** PARAMETER END **** ------------------------------------ */
     /* <------------------------------------ **** FUNCTION START **** ------------------------------------ */
     /************* This section will include this component general function *************/
 
     // 当移动时
     const handleMove = (e: MouseEvent | React.TouchEvent<HTMLDivElement>) => {
-        if (!valRef.current) return;
-        let x = 0;
-        let y = 0;
-        if (e instanceof MouseEvent) {
-            x = e.pageX;
-            y = e.pageY;
-        } else {
-            const position = e.changedTouches[0];
-            x = position.pageX;
-            y = position.pageY;
+        if (timer.current) {
+            return;
         }
-        const moveX = x - point.current.pageX;
-        const moveY = y - point.current.pageY;
+        timer.current = window.setTimeout(() => {
+            if (!valRef.current) return;
+            let x = 0;
+            let y = 0;
+            if (e instanceof MouseEvent) {
+                x = e.pageX;
+                y = e.pageY;
+            } else {
+                const position = e.changedTouches[0];
+                x = position.pageX;
+                y = position.pageY;
+            }
+            const moveX = x - point.current.pageX;
+            const moveY = y - point.current.pageY;
 
-        point.current.x = moveX + point.current.x;
-        point.current.y = moveY + point.current.y;
-        point.current.pageX = x;
-        point.current.pageY = y;
+            point.current.x = moveX + point.current.x;
+            point.current.y = moveY + point.current.y;
+            point.current.pageX = x;
+            point.current.pageY = y;
 
-        setPosition({
-            ...point.current,
-        });
+            setPosition({
+                ...point.current,
+            });
+            timer.current && window.clearTimeout(timer.current);
+            timer.current = undefined;
+        }, 1);
     };
 
     // 当鼠标 或者手 弹起时的通用事件
     const handleUp = () => {
+        timer.current && window.clearTimeout(timer.current);
+        timer.current = undefined;
         document.onselectstart = selectedFn.current;
         point.current = {
             x: 0,
@@ -220,8 +240,8 @@ export const Product: React.FC<ProductProps> = ({
             {list.map((item) => {
                 return (
                     <div
-                        className={`item${value?.code === item.code && isGray ? " gray" : ""}`}
                         key={item.code}
+                        className={`item${value?.code === item.code && isGray ? " gray" : ""}`}
                         {...(isMobile
                             ? {
                                   onTouchStart: (e) => {
@@ -235,10 +255,30 @@ export const Product: React.FC<ProductProps> = ({
                                       handleMouseDown(item, e);
                                   },
                               })}
-                        dangerouslySetInnerHTML={{
-                            __html: item.content,
-                        }}
-                    />
+                    >
+                        <div className="itemBg1" />
+                        <div className="itemBg2" />
+                        <div className="itemBg3" />
+                        <div
+                            className="itemBg4"
+                            dangerouslySetInnerHTML={{
+                                __html: pumpkin,
+                            }}
+                        />
+                        <div
+                            className="itemBg5"
+                            dangerouslySetInnerHTML={{
+                                __html: spider,
+                            }}
+                        />
+
+                        <span
+                            className="itemContent"
+                            dangerouslySetInnerHTML={{
+                                __html: item.content,
+                            }}
+                        />
+                    </div>
                 );
             })}
         </>

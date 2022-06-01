@@ -7,9 +7,6 @@ import { comms } from ".";
 /* <------------------------------------ **** INTERFACE START **** ------------------------------------ */
 /** This section will include all the interface for this tsx file */
 
-// const colors = options.map(item => { const key = Object.keys(item)[0]; return item[key] });
-
-// import { colors } from './defaultData';
 import { Desk } from "./ColorItems/desk";
 import { SmallDesk } from "./ColorItems/smallDesk";
 import { Tablet } from "./ColorItems/tablet";
@@ -75,7 +72,6 @@ export const StorageCabinet: React.FC<StorageCabinetProps> = ({ handleChange, va
     };
 
     let classStr = "storageCabinet_wrap";
-
     let mainEl = <></>;
 
     const valueData = deepCloneData(value);

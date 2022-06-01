@@ -6,6 +6,8 @@ import { useListenPosition } from "../useListenPosition";
 import jt from "../icon_jt.png";
 import { ScrollComponent } from "../Scroll";
 import { getScrollValue } from "../getScrollValue";
+import bg from "../Assets/svg/bg_product.svg";
+import bg1 from "../Assets/svg/bg_product1.svg";
 
 export interface DeskProps extends StorageCabinetProps {
     colors: Array<ListItemProps>;
@@ -109,9 +111,8 @@ export const Desk: React.FC<DeskProps> = ({ colors, handleChange, value, handleC
      * 观察滚动条状态
      */
     const watchScrollStatus = (scrollBody: HTMLElement) => {
-        const rect = scrollBody.getBoundingClientRect();
         setShowTop(scrollBody.scrollTop > 0);
-        setShowBottom(scrollBody.scrollTop + rect.height < scrollBody.scrollHeight);
+        setShowBottom(scrollBody.scrollTop + scrollBody.clientHeight < scrollBody.scrollHeight);
     };
 
     /**
@@ -166,10 +167,9 @@ export const Desk: React.FC<DeskProps> = ({ colors, handleChange, value, handleC
             return;
         }
 
-        const rect = el.getBoundingClientRect();
         switch (status) {
             case 1:
-                if (el.scrollTop + rect.height < el.scrollHeight) {
+                if (el.scrollTop + el.clientHeight < el.scrollHeight) {
                     el.scrollTop = el.scrollTop + 1;
                     timer.current = window.setTimeout(() => startScroll(status));
                 }
@@ -267,6 +267,23 @@ export const Desk: React.FC<DeskProps> = ({ colors, handleChange, value, handleC
                 {colors.map((item, n) => {
                     return (
                         <div className="storageCabinet_item" key={`${item.code}`} data-i={n}>
+                            <div
+                                className="storageCabinet_itemBg"
+                                dangerouslySetInnerHTML={{
+                                    __html: bg,
+                                }}
+                            />
+
+                            <div
+                                className="storageCabinet_itemBg1"
+                                dangerouslySetInnerHTML={{
+                                    __html: bg1,
+                                }}
+                            />
+                            <div className="storageCabinet_itemBg2" />
+                            <div className="storageCabinet_itemBg3" />
+                            <div className="storageCabinet_itemBg4" />
+
                             <div className="storageCabinet_itemTitle">{item.content}</div>
                             <div className="storageCabinet_itemValues">
                                 <Item

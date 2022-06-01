@@ -7,6 +7,10 @@ import { StorageCabinet } from "./storageCabinet";
 import { Context } from "./context";
 import { isMobile } from "./isMobile";
 import { deepCloneData, DragData, OptionProps, PointProps } from "./unit";
+import leftHr from "./Assets/svg/leftHr.svg";
+import rightHr from "./Assets/svg/rightHr.svg";
+import spider from "./Assets/svg/spider.svg";
+import pumpkin from "./Assets/svg/pumpkin.svg";
 
 import { PluginComms, ConfigYML } from "@possie-engine/dr-plugin-sdk";
 
@@ -81,6 +85,20 @@ const Main: React.FC = () => {
                     }}
                     value={deepCloneData(selectItem)}
                 />
+                <div className="hr">
+                    <div
+                        className="hr_left"
+                        dangerouslySetInnerHTML={{
+                            __html: leftHr,
+                        }}
+                    />
+                    <div
+                        className="hr_right"
+                        dangerouslySetInnerHTML={{
+                            __html: rightHr,
+                        }}
+                    />
+                </div>
                 <StorageCabinet
                     handleChange={(res) => {
                         setSelectItem(deepCloneData(res));
@@ -96,10 +114,29 @@ const Main: React.FC = () => {
                             width: `${position.width}px`,
                             height: `${position.height}px`,
                         }}
-                        dangerouslySetInnerHTML={{
-                            __html: selectItem?.content ?? "",
-                        }}
-                    />
+                    >
+                        <div className="itemBg1" />
+                        <div className="itemBg2" />
+                        <div className="itemBg3" />
+                        <div
+                            className="itemBg4"
+                            dangerouslySetInnerHTML={{
+                                __html: pumpkin,
+                            }}
+                        />
+                        <div
+                            className="itemBg5"
+                            dangerouslySetInnerHTML={{
+                                __html: spider,
+                            }}
+                        />
+                        <span
+                            className="itemContent"
+                            dangerouslySetInnerHTML={{
+                                __html: selectItem?.content ?? "",
+                            }}
+                        />
+                    </div>
                 )}
             </Context.Provider>
         </div>
