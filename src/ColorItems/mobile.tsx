@@ -3,6 +3,8 @@ import { useListenPosition } from "../useListenPosition";
 import { useMContext } from "../context";
 import { Item } from "../item";
 import { DeskProps } from "./desk";
+import bg from "../Assets/svg/bg_product.svg";
+import bg1 from "../Assets/svg/bg_product1.svg";
 
 export const Mobile: React.FC<DeskProps> = ({ colors, handleChange, value, handleColorChange }) => {
     const listRef = useRef([...colors]);
@@ -68,6 +70,22 @@ export const Mobile: React.FC<DeskProps> = ({ colors, handleChange, value, handl
                 {colors.map((item, n) => {
                     return (
                         <div className="storageCabinet_item" key={item.code} data-i={n}>
+                            <div
+                                className="storageCabinet_itemBg"
+                                dangerouslySetInnerHTML={{
+                                    __html: bg,
+                                }}
+                            />
+
+                            <div
+                                className="storageCabinet_itemBg1"
+                                dangerouslySetInnerHTML={{
+                                    __html: bg1,
+                                }}
+                            />
+                            <div className="storageCabinet_itemBg2" />
+                            <div className="storageCabinet_itemBg3" />
+                            <div className="storageCabinet_itemBg4" />
                             <div className="storageCabinet_itemTitle">{item.content}</div>
                             <div className="storageCabinet_itemValues">
                                 <Item

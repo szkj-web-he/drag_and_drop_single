@@ -2,9 +2,12 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useMContext } from "../context";
 import { Item } from "../item";
 import { ScrollComponent } from "../Scroll";
-import { Icon } from "../icon";
 import { DeskProps } from "./desk";
 import { useListenPosition } from "../useListenPosition";
+import bg from "../Assets/svg/bg_product.svg";
+import bg1 from "../Assets/svg/bg_product1.svg";
+import Arrow from "../arrow";
+import ArrowBg from "../arrowBg";
 
 export const SmallDesk: React.FC<DeskProps> = ({
     colors,
@@ -70,12 +73,47 @@ export const SmallDesk: React.FC<DeskProps> = ({
         return node;
     };
 
+    const getItemWidth = (el: HTMLElement): HTMLElement | null => {
+        const childrenList = el.children;
+
+        let node: null | HTMLElement = null;
+        for (let i = 0; i < childrenList.length; ) {
+            const item = childrenList[i];
+            const classAttr = item.getAttribute("class")?.split(" ");
+            if (classAttr?.includes("storageCabinet_item") && item instanceof HTMLElement) {
+                i = childrenList.length;
+                node = item;
+            } else {
+                ++i;
+            }
+        }
+
+        if (!node) {
+            for (let i = 0; i < childrenList.length; ++i) {
+                const item = childrenList[i];
+                if (item instanceof HTMLElement) {
+                    node = getItemWidth(item);
+                }
+            }
+        }
+        return node;
+    };
+
     const toLeft = () => {
         if (scrollStatus === 0) return;
         const node = getScrollEl();
         if (!node) return;
+
+        let itemWidth = 0;
+        if (node instanceof HTMLElement) {
+            const el = getItemWidth(node);
+            if (el) {
+                itemWidth = el.offsetWidth;
+            }
+        }
+
         node.scrollTo({
-            left: node.scrollLeft - 165,
+            left: node.scrollLeft - itemWidth,
             behavior: "smooth",
         });
     };
@@ -83,8 +121,17 @@ export const SmallDesk: React.FC<DeskProps> = ({
         if (scrollStatus === 1) return;
         const node = getScrollEl();
         if (!node) return;
+
+        let itemWidth = 0;
+        if (node instanceof HTMLElement) {
+            const el = getItemWidth(node);
+            if (el) {
+                itemWidth = el.offsetWidth;
+            }
+        }
+
         node.scrollTo({
-            left: node.scrollLeft + 164,
+            left: node.scrollLeft + itemWidth,
             behavior: "smooth",
         });
     };
@@ -148,13 +195,35 @@ export const SmallDesk: React.FC<DeskProps> = ({
                         className={`arrowContainer_pre${scrollStatus === 0 ? " gray" : ""}`}
                         onClick={toLeft}
                     >
-                        <Icon className="arrowContainer_icon" />
+                        <div className="arrowContainer_bg">
+                            <ArrowBg
+                                className="arrowContainer_bgIcon"
+                                lightColor={scrollStatus === 0 ? "#8B859A" : "#FFE39C"}
+                                patternColor={scrollStatus === 0 ? "#585065" : "#E89601"}
+                            />
+                        </div>
+                        <Arrow
+                            className="arrowContainer_icon"
+                            borderColor={scrollStatus === 0 ? "#453C5E" : "#974C08"}
+                            fillColor={scrollStatus === 0 ? "#B8B7BA" : "#FFF4D9"}
+                        />
                     </div>
                     <div
                         className={`arrowContainer_next${scrollStatus === 1 ? " gray" : ""}`}
                         onClick={toRight}
                     >
-                        <Icon className="arrowContainer_icon" />
+                        <div className="arrowContainer_bg">
+                            <ArrowBg
+                                className="arrowContainer_bgIcon"
+                                lightColor={scrollStatus === 1 ? "#8B859A" : "#FFE39C"}
+                                patternColor={scrollStatus === 1 ? "#585065" : "#E89601"}
+                            />
+                        </div>
+                        <Arrow
+                            className="arrowContainer_icon"
+                            borderColor={scrollStatus === 1 ? "#453C5E" : "#974C08"}
+                            fillColor={scrollStatus === 1 ? "#B8B7BA" : "#FFF4D9"}
+                        />
                     </div>
                 </div>
             )}
@@ -164,6 +233,9 @@ export const SmallDesk: React.FC<DeskProps> = ({
                 bodyClassName="smallDesk_scrollBody"
                 handleBarChange={handleScroll}
                 ref={scrollEl}
+                hidden={{
+                    y: true,
+                }}
             >
                 <div className="storageCabinet_smallDeskRow" ref={ref}>
                     {colors.map((item, n) => {
@@ -174,6 +246,23 @@ export const SmallDesk: React.FC<DeskProps> = ({
                                 data-i={n}
                                 onMouseUp={() => handleMouseUp(n)}
                             >
+                                <div
+                                    className="storageCabinet_itemBg"
+                                    dangerouslySetInnerHTML={{
+                                        __html: bg,
+                                    }}
+                                />
+
+                                <div
+                                    className="storageCabinet_itemBg1"
+                                    dangerouslySetInnerHTML={{
+                                        __html: bg1,
+                                    }}
+                                />
+                                <div className="storageCabinet_itemBg2" />
+                                <div className="storageCabinet_itemBg3" />
+                                <div className="storageCabinet_itemBg4" />
+
                                 <div className="storageCabinet_itemTitle">{item.content}</div>
                                 <div className="storageCabinet_itemValues">
                                     <Item

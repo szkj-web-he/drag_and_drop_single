@@ -103,7 +103,7 @@ export const Product: React.FC<ProductProps> = ({
             });
             timer.current && window.clearTimeout(timer.current);
             timer.current = undefined;
-        }, 1);
+        });
     };
 
     // 当鼠标 或者手 弹起时的通用事件
