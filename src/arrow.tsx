@@ -8,17 +8,10 @@ import React from "react";
 /* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
 /* <------------------------------------ **** INTERFACE START **** ------------------------------------ */
 /** This section will include all the interface for this tsx file */
-interface TempProps extends React.SVGAttributes<SVGSVGElement> {
-    borderColor?: string;
-    fillColor?: string;
-}
+type TempProps = React.SVGAttributes<SVGSVGElement>;
 /* <------------------------------------ **** INTERFACE END **** ------------------------------------ */
 /* <------------------------------------ **** FUNCTION COMPONENT START **** ------------------------------------ */
-const Temp: React.FC<TempProps> = ({
-    borderColor = "#453C5E",
-    fillColor = "#B8B7BA",
-    ...props
-}) => {
+const Temp: React.FC<TempProps> = ({ ...props }) => {
     /* <------------------------------------ **** STATE START **** ------------------------------------ */
     /************* This section will include this component HOOK function *************/
     /* <------------------------------------ **** STATE END **** ------------------------------------ */
@@ -29,13 +22,10 @@ const Temp: React.FC<TempProps> = ({
     /************* This section will include this component general function *************/
     /* <------------------------------------ **** FUNCTION END **** ------------------------------------ */
     return (
-        <svg viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+        <svg viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
             <path
-                d="M16.5973 3.9857L8.7735 4.43306C8.67686 4.43728 8.5923 4.35709 8.5923 4.25158V2.5128C8.5923 1.2889 7.27558 0.571447 6.32126 1.28046L4.26765 2.79979L1.61004 4.76646C0.796653 5.36997 0.796653 6.63186 1.61004 7.23536L4.26765 9.20204L6.32126 10.7214C7.27558 11.4262 8.5923 10.7129 8.5923 9.48902V7.71648C8.5923 7.61097 8.67686 7.53078 8.7735 7.535L16.5933 8.01613C16.8148 8.02879 17 7.80511 17 7.52234V4.47948C17 4.19672 16.8148 3.97304 16.5973 3.9857Z"
-                fill={fillColor}
-                stroke={borderColor}
-                strokeWidth="0.479078"
-                strokeMiterlimit="10"
+                d="M10.5002 0.163494C10.2863 -0.054498 9.93955 -0.0544979 9.72566 0.163494C9.51177 0.381485 9.51177 0.73492 9.72566 0.952911L14.1994 5.51251H0.547695C0.245212 5.51251 1.11571e-07 5.76242 0 6.07071C-8.464e-08 6.379 0.245211 6.62891 0.547695 6.62891H14.0607L9.72566 11.0471C9.51177 11.2651 9.51177 11.6185 9.72566 11.8365C9.93955 12.0545 10.2863 12.0545 10.5002 11.8365L15.8396 6.39471C16.0535 6.17672 16.0535 5.82328 15.8396 5.60529L10.5002 0.163494Z"
+                fill="currentColor"
             />
         </svg>
     );

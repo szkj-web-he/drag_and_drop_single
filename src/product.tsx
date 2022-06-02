@@ -5,8 +5,6 @@ import { stopSelect } from "./noSelected";
 import { useMContext } from "./context";
 import { getScrollValue } from "./getScrollValue";
 import { DragData, HandleChangeFn, OptionProps, PointProps } from "./unit";
-import spider from "./Assets/svg/spider.svg";
-import pumpkin from "./Assets/svg/pumpkin.svg";
 
 /* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
 /* <------------------------------------ **** INTERFACE START **** ------------------------------------ */
@@ -255,30 +253,10 @@ export const Product: React.FC<ProductProps> = ({
                                       handleMouseDown(item, e);
                                   },
                               })}
-                    >
-                        <div className="itemBg1" />
-                        <div className="itemBg2" />
-                        <div className="itemBg3" />
-                        <div
-                            className="itemBg4"
-                            dangerouslySetInnerHTML={{
-                                __html: pumpkin,
-                            }}
-                        />
-                        <div
-                            className="itemBg5"
-                            dangerouslySetInnerHTML={{
-                                __html: spider,
-                            }}
-                        />
-
-                        <span
-                            className="itemContent"
-                            dangerouslySetInnerHTML={{
-                                __html: item.content,
-                            }}
-                        />
-                    </div>
+                        dangerouslySetInnerHTML={{
+                            __html: item.content,
+                        }}
+                    />
                 );
             })}
         </>
