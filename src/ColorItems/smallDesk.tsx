@@ -25,6 +25,8 @@ export const SmallDesk: React.FC<DeskProps> = ({
 
     const [showBtn, setShowBtn] = useState(false);
 
+    const scrollTimer = useRef<number>();
+
     /**
      * 0 起点
      * 1 终点
@@ -48,6 +50,7 @@ export const SmallDesk: React.FC<DeskProps> = ({
         fn();
         return () => {
             window.removeEventListener("resize", fn);
+            scrollTimer.current && window.clearTimeout(scrollTimer.current);
         };
     }, []);
 
@@ -166,39 +169,47 @@ export const SmallDesk: React.FC<DeskProps> = ({
         clientHeight: number;
         clientWidth: number;
     }) => {
-        const el = scrollEl.current;
-        if (!el) return;
-        const childrenList = el.children;
+        if (scrollTimer.current) {
+            return;
+        }
+        scrollTimer.current = window.setTimeout(() => {
+            window.clearTimeout(scrollTimer.current);
+            scrollTimer.current = undefined;
 
-        let scrollBody: null | HTMLElement = null;
-        for (let i = 0; i < childrenList.length; ) {
-            const childrenElement = childrenList[i];
-            const classAttr = childrenElement.getAttribute("class")?.split(" ");
-            if (classAttr?.includes("smallDesk_scrollBody")) {
-                i = childrenList.length;
-                if (childrenElement instanceof HTMLElement) {
-                    scrollBody = childrenElement;
+            const el = scrollEl.current;
+            if (!el) return;
+            const childrenList = el.children;
+
+            let scrollBody: null | HTMLElement = null;
+            for (let i = 0; i < childrenList.length; ) {
+                const childrenElement = childrenList[i];
+                const classAttr = childrenElement.getAttribute("class")?.split(" ");
+                if (classAttr?.includes("smallDesk_scrollBody")) {
+                    i = childrenList.length;
+                    if (childrenElement instanceof HTMLElement) {
+                        scrollBody = childrenElement;
+                    }
+                } else {
+                    ++i;
                 }
-            } else {
-                ++i;
             }
-        }
 
-        if (!scrollBody) return;
+            if (!scrollBody) return;
 
-        const rect = scrollBody.getBoundingClientRect();
+            const rect = scrollBody.getBoundingClientRect();
 
-        if (
-            Math.ceil(left + clientWidth) >= scrollWidth ||
-            Math.ceil(left + offsetWidth) >= scrollWidth ||
-            Math.ceil(rect.width + left) >= scrollWidth
-        ) {
-            setScrollStatus(1);
-        } else if (left <= 0) {
-            setScrollStatus(0);
-        } else {
-            setScrollStatus(2);
-        }
+            if (
+                Math.ceil(left + clientWidth) >= scrollWidth ||
+                Math.ceil(left + offsetWidth) >= scrollWidth ||
+                Math.ceil(rect.width + left) >= scrollWidth
+            ) {
+                setScrollStatus(1);
+            } else if (left <= 0) {
+                setScrollStatus(0);
+            } else {
+                setScrollStatus(2);
+            }
+        });
     };
 
     const handleUp = (n: number) => {
