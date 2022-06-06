@@ -22,6 +22,7 @@ export const SmallDesk: React.FC<DeskProps> = ({
 
     const [showBtn, setShowBtn] = useState(false);
 
+    const scrollTimer = useRef<number>();
     /**
      * 0 起点
      * 1 终点
@@ -45,6 +46,7 @@ export const SmallDesk: React.FC<DeskProps> = ({
         fn();
         return () => {
             window.removeEventListener("resize", fn);
+            scrollTimer.current && window.clearTimeout(scrollTimer.current);
         };
     }, []);
 
@@ -108,6 +110,7 @@ export const SmallDesk: React.FC<DeskProps> = ({
         left,
         scrollWidth,
         clientWidth,
+        offsetWidth,
     }: {
         left: number;
         top: number;
@@ -118,13 +121,48 @@ export const SmallDesk: React.FC<DeskProps> = ({
         clientHeight: number;
         clientWidth: number;
     }) => {
-        if (Math.ceil(left + clientWidth) >= scrollWidth) {
-            setScrollStatus(1);
-        } else if (left <= 0) {
-            setScrollStatus(0);
-        } else {
-            setScrollStatus(2);
+        if (scrollTimer.current) {
+            window.clearTimeout(scrollTimer.current);
         }
+        scrollTimer.current = window.setTimeout(() => {
+            window.clearTimeout(scrollTimer.current);
+            scrollTimer.current = undefined;
+
+            const el = scrollEl.current;
+            if (!el) return;
+            const childrenList = el.children;
+
+            let scrollBody: null | HTMLElement = null;
+            for (let i = 0; i < childrenList.length; ) {
+                const childrenElement = childrenList[i];
+                const classAttr = childrenElement.getAttribute("class")?.split(" ");
+                if (classAttr?.includes("smallDesk_scrollBody")) {
+                    i = childrenList.length;
+                    if (childrenElement instanceof HTMLElement) {
+                        scrollBody = childrenElement;
+                    }
+                } else {
+                    ++i;
+                }
+            }
+
+            if (!scrollBody) return;
+
+            const rect = scrollBody.getBoundingClientRect();
+
+            left = Math.round(left);
+            if (
+                left + clientWidth >= scrollWidth ||
+                left + offsetWidth >= scrollWidth ||
+                Math.ceil(rect.width) + left >= scrollWidth
+            ) {
+                setScrollStatus(1);
+            } else if (left <= 0) {
+                setScrollStatus(0);
+            } else {
+                setScrollStatus(2);
+            }
+        });
     };
 
     const handleUp = (n: number) => {
