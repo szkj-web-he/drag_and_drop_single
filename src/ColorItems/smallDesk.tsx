@@ -166,9 +166,32 @@ export const SmallDesk: React.FC<DeskProps> = ({
         clientHeight: number;
         clientWidth: number;
     }) => {
+        const el = scrollEl.current;
+        if (!el) return;
+        const childrenList = el.children;
+
+        let scrollBody: null | HTMLElement = null;
+        for (let i = 0; i < childrenList.length; ) {
+            const childrenElement = childrenList[i];
+            const classAttr = childrenElement.getAttribute("class")?.split(" ");
+            if (classAttr?.includes("smallDesk_scrollBody")) {
+                i = childrenList.length;
+                if (childrenElement instanceof HTMLElement) {
+                    scrollBody = childrenElement;
+                }
+            } else {
+                ++i;
+            }
+        }
+
+        if (!scrollBody) return;
+
+        const rect = scrollBody.getBoundingClientRect();
+
         if (
             Math.ceil(left + clientWidth) >= scrollWidth ||
-            Math.ceil(left + offsetWidth) >= scrollWidth
+            Math.ceil(left + offsetWidth) >= scrollWidth ||
+            Math.ceil(rect.width + left) >= scrollWidth
         ) {
             setScrollStatus(1);
         } else if (left <= 0) {
