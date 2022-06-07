@@ -1,10 +1,10 @@
 /* <------------------------------------ **** DEPENDENCE IMPORT START **** ------------------------------------ */
 /** This section will include all the necessary dependence for this tsx file */
-import React, { useEffect, useLayoutEffect, useRef } from "react";
+import React, { useRef, useState } from "react";
 import { stopSelect } from "./noSelected";
 import { useMContext } from "./context";
 import { getScrollValue } from "./getScrollValue";
-import { DragData, HandleChangeFn, OptionProps, PointProps } from "./unit";
+import { deepCloneData, OptionProps } from "./unit";
 
 /* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
 /* <------------------------------------ **** INTERFACE START **** ------------------------------------ */
@@ -12,60 +12,31 @@ import { DragData, HandleChangeFn, OptionProps, PointProps } from "./unit";
 export interface ProductProps {
     list: Array<OptionProps>;
 
-    handleChange: HandleChangeFn;
-
-    value?: DragData;
-
-    placement: "warehouse" | "storageCabinet";
-
     index?: number;
-
-    onUp: (res: OptionProps | undefined) => void;
 }
 /* <------------------------------------ **** INTERFACE END **** ------------------------------------ */
 /* <------------------------------------ **** FUNCTION COMPONENT START **** ------------------------------------ */
-export const Product: React.FC<ProductProps> = ({
-    list,
-    handleChange,
-    value,
-    placement,
-    index,
-    onUp,
-}) => {
+export const Product: React.FC<ProductProps> = ({ list, index }) => {
     /* <------------------------------------ **** STATE START **** ------------------------------------ */
     /************* This section will include this component HOOK function *************/
 
-    const { mouseUpOnStorage, isMobile, setPosition } = useMContext();
+    const { isMobile, handleMoveCallback, handleValueChangeCallback, basketFn } = useMContext();
 
     const selectedFn = useRef<typeof document.onselectstart>(null);
 
-    const point = useRef<PointProps>({
-        pageX: 0,
-        pageY: 0,
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
+    const point = useRef({
+        offsetX: 0,
+        offsetY: 0,
     });
 
-    const valRef = useRef(value ? { code: value.code, content: value.content } : undefined);
-
-    const timer = useRef<number>();
+    const selectValueRef = useRef<OptionProps>();
+    const [selectValue, setSelectValue] = useState(
+        selectValueRef.current ? { ...selectValueRef.current } : undefined,
+    );
 
     /* <------------------------------------ **** STATE END **** ------------------------------------ */
     /* <------------------------------------ **** PARAMETER START **** ------------------------------------ */
     /************* This section will include this component parameter *************/
-
-    useLayoutEffect(() => {
-        valRef.current = value ? { code: value.code, content: value.content } : undefined;
-    }, [value]);
-
-    useEffect(() => {
-        return () => {
-            timer.current && window.clearTimeout(timer.current);
-            timer.current = undefined;
-        };
-    }, []);
 
     /* <------------------------------------ **** PARAMETER END **** ------------------------------------ */
     /* <------------------------------------ **** FUNCTION START **** ------------------------------------ */
@@ -73,92 +44,70 @@ export const Product: React.FC<ProductProps> = ({
 
     // 当移动时
     const handleMove = (e: MouseEvent | React.TouchEvent<HTMLDivElement>) => {
-        if (timer.current) {
+        if (!selectValueRef.current) {
             return;
         }
-        timer.current = window.setTimeout(() => {
-            if (!valRef.current) return;
-            let x = 0;
-            let y = 0;
-            if (e instanceof MouseEvent) {
-                x = e.pageX;
-                y = e.pageY;
-            } else {
-                const position = e.changedTouches[0];
-                x = position.pageX;
-                y = position.pageY;
-            }
-            const moveX = x - point.current.pageX;
-            const moveY = y - point.current.pageY;
 
-            point.current.x = moveX + point.current.x;
-            point.current.y = moveY + point.current.y;
-            point.current.pageX = x;
-            point.current.pageY = y;
+        let x = 0;
+        let y = 0;
 
-            setPosition({
-                ...point.current,
-            });
-            timer.current && window.clearTimeout(timer.current);
-            timer.current = undefined;
+        if (e instanceof MouseEvent) {
+            x = e.pageX;
+            y = e.pageY;
+            basketFn.current.move(e.clientX, e.clientY);
+        } else {
+            const position = e.changedTouches[0];
+            x = position.pageX;
+            y = position.pageY;
+            basketFn.current.move(position.clientX, position.clientY);
+        }
+        handleMoveCallback({
+            x: x - point.current.offsetX,
+            y: y - point.current.offsetY,
         });
     };
 
     // 当鼠标 或者手 弹起时的通用事件
-    const handleUp = () => {
-        timer.current && window.clearTimeout(timer.current);
-        timer.current = undefined;
-        document.onselectstart = selectedFn.current;
-        point.current = {
-            x: 0,
-            y: 0,
-            pageX: 0,
-            pageY: 0,
-            width: 0,
-            height: 0,
-        };
+    const handleUp = (x: number, y: number) => {
+        if (!selectValueRef.current) {
+            return;
+        }
 
-        setPosition(undefined);
-        onUp(valRef.current);
+        const data = deepCloneData(selectValueRef.current);
+        basketFn.current.up({
+            index,
+            x,
+            y,
+            data: {
+                code: data.code,
+                content: data.content,
+            },
+        });
+
+        document.onselectstart = selectedFn.current;
+        handleValueChangeCallback(undefined);
+
+        selectValueRef.current = undefined;
+        setSelectValue(undefined);
+
+        point.current = {
+            offsetX: 0,
+            offsetY: 0,
+        };
     };
 
     // 当鼠标弹起时
-    const handleMouseUp = () => {
-        handleUp();
+    const handleMouseUp = (e: MouseEvent) => {
+        handleUp(e.clientX, e.clientY);
         document.removeEventListener("mousemove", handleMove);
         document.removeEventListener("mouseup", handleMouseUp);
     };
 
     // 当手离开屏幕时
     const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
-        if (!valRef.current) return;
-
         const position = e.changedTouches[0];
 
-        const els = document.elementsFromPoint(position.clientX, position.clientY);
-
-        for (let i = 0; i < els.length; ) {
-            const el = els[i];
-
-            if (el.nodeName !== "HTML" && el.nodeName !== "BODY") {
-                const className = el.getAttribute("class");
-                if (className?.split(" ").includes("storageCabinet_item")) {
-                    const n = el.getAttribute("data-i");
-                    if (n) {
-                        mouseUpOnStorage.current = {
-                            index: Number(n),
-                            val: {
-                                ...valRef.current,
-                            },
-                        };
-                    }
-                    i = els.length;
-                }
-            }
-            ++i;
-        }
-
-        handleUp();
+        handleUp(position.clientX, position.clientY);
     };
 
     // 手或者鼠标 按下的通用事件
@@ -170,31 +119,39 @@ export const Product: React.FC<ProductProps> = ({
             y: number;
         },
     ) => {
-        handleChange({
-            code: item.code,
-            content: item.content,
-            placement: placement === "warehouse" ? "warehouse" : { storageCabinet: index || 0 },
-        });
-        stopSelect(e, selectedFn, true);
+        const rect = e.currentTarget.getBoundingClientRect();
 
         const scrollData = getScrollValue();
-        const rect = e.currentTarget.getBoundingClientRect();
-        const rectX = rect.left + scrollData.x;
-        const rectY = rect.top + scrollData.y;
 
-        point.current = {
-            pageX: position.x,
-            pageY: position.y,
-            x: rectX,
-            y: rectY,
-            width: rect.width,
-            height: rect.height,
+        selectValueRef.current = {
+            code: item.code,
+            content: item.content,
         };
-        setPosition({
-            ...point.current,
+        setSelectValue({
+            ...selectValueRef.current,
         });
 
-        mouseUpOnStorage.current = undefined;
+        handleValueChangeCallback({
+            code: item.code,
+            content: item.content,
+            width: rect.width,
+            height: rect.height,
+        });
+
+        const left = rect.left + scrollData.x;
+        const top = rect.top + scrollData.y;
+
+        handleMoveCallback({
+            x: left,
+            y: top,
+        });
+
+        stopSelect(e, selectedFn, true);
+
+        point.current = {
+            offsetX: position.x - left,
+            offsetY: position.y - top,
+        };
     };
 
     // 当鼠标按下时
@@ -214,23 +171,12 @@ export const Product: React.FC<ProductProps> = ({
     const handleTouchStart = (item: OptionProps, e: React.TouchEvent<HTMLDivElement>) => {
         const position = e.changedTouches[0];
         e.stopPropagation();
+
         handleDown(item, e, {
             x: position.pageX,
             y: position.pageY,
         });
     };
-
-    let isGray = false;
-    if (value) {
-        if (placement === "warehouse" && value.placement === placement) {
-            isGray = true;
-        } else if (
-            placement === "storageCabinet" &&
-            JSON.stringify(value.placement) === JSON.stringify({ ["storageCabinet"]: index })
-        ) {
-            isGray = true;
-        }
-    }
 
     /* <------------------------------------ **** FUNCTION END **** ------------------------------------ */
     return (
@@ -239,7 +185,7 @@ export const Product: React.FC<ProductProps> = ({
                 return (
                     <div
                         key={item.code}
-                        className={`item${value?.code === item.code && isGray ? " gray" : ""}`}
+                        className={`item${selectValue?.code === item.code ? " gray" : ""}`}
                         {...(isMobile
                             ? {
                                   onTouchStart: (e) => {

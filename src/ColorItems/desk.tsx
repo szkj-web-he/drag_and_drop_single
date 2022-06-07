@@ -1,75 +1,25 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React from "react";
 import { Item } from "../item";
-import { useMContext } from "../context";
-import { ListItemProps, StorageCabinetProps } from "../storageCabinet";
-import { useListenPosition } from "../useListenPosition";
+import { ListItemProps } from "../storageCabinet";
 import { ScrollComponent } from "../Scroll";
 import flower from "../Assets/svg/lotus_flower.svg";
 import Iframe from "../typeIcon";
 
-export interface DeskProps extends StorageCabinetProps {
+export interface DeskProps {
     colors: Array<ListItemProps>;
-    handleColorChange: (res: ListItemProps[]) => void;
+    activeIndex?: number;
 }
 
-export const Desk: React.FC<DeskProps> = ({ colors, handleChange, value, handleColorChange }) => {
-    const listRef = useRef([...colors]);
-
-    const { mouseUpOnStorage } = useMContext();
-
-    const ref = useRef<HTMLDivElement | null>(null);
-
-    useLayoutEffect(() => {
-        listRef.current = [...colors];
-    }, [colors]);
-
-    useListenPosition(ref);
-
-    const handleMouseUpOnItem = (n: number) => {
-        if (!listRef.current[n] || !value) {
-            return;
-        }
-        listRef.current[n].value = {
-            code: value.code,
-            content: value.content,
-        };
-
-        handleColorChange([...listRef.current]);
-
-        mouseUpOnStorage.current = {
-            index: n,
-            val: {
-                code: value.code,
-                content: value.content,
-            },
-        };
-    };
-
-    /**
-     * 当  松开item时
-     */
-    const handleUp = (n: number) => {
-        const data = mouseUpOnStorage.current;
-        handleChange(undefined);
-        if (n === data?.index) {
-            return;
-        }
-        const arr = [...listRef.current];
-        arr[n].value = undefined;
-
-        handleColorChange([...listRef.current]);
-    };
-
+export const Desk: React.FC<DeskProps> = ({ colors, activeIndex }) => {
     return (
         <ScrollComponent className="storageCabinet_deskScrollWrap">
-            <div className="storageCabinet_row" ref={ref}>
+            <div className="storageCabinet_row">
                 {colors.map((item, n) => {
                     return (
                         <div
-                            className="storageCabinet_item"
+                            className={`storageCabinet_item${activeIndex === n ? " active" : ""}`}
                             key={`${item.code}`}
                             data-i={n}
-                            onMouseUp={() => handleMouseUpOnItem(n)}
                         >
                             <Iframe className="storageCabinet_view" />
                             <div
@@ -81,13 +31,7 @@ export const Desk: React.FC<DeskProps> = ({ colors, handleChange, value, handleC
 
                             <div className="storageCabinet_itemTitle">{item.content}</div>
                             <div className="storageCabinet_itemValues">
-                                <Item
-                                    values={item.value}
-                                    handleChange={handleChange}
-                                    onUp={() => handleUp(n)}
-                                    index={n}
-                                    value={value ? JSON.parse(JSON.stringify(value)) : undefined}
-                                />
+                                <Item values={item.value} index={n} />
                             </div>
                         </div>
                     );

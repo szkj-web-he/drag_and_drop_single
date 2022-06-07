@@ -11,11 +11,7 @@ import { Desk } from "./ColorItems/desk";
 import { SmallDesk } from "./ColorItems/smallDesk";
 import { Tablet } from "./ColorItems/tablet";
 import { Mobile } from "./ColorItems/mobile";
-import { deepCloneData, DragData, OptionProps } from "./unit";
-export interface StorageCabinetProps {
-    handleChange: (res: DragData | undefined) => void;
-    value?: DragData;
-}
+import { deepCloneData, OptionProps } from "./unit";
 
 export interface ListItemProps {
     code: string;
@@ -24,7 +20,7 @@ export interface ListItemProps {
 }
 /* <------------------------------------ **** INTERFACE END **** ------------------------------------ */
 /* <------------------------------------ **** FUNCTION COMPONENT START **** ------------------------------------ */
-export const StorageCabinet: React.FC<StorageCabinetProps> = ({ handleChange, value }) => {
+export const StorageCabinet: React.FC = () => {
     /* <------------------------------------ **** STATE START **** ------------------------------------ */
     /************* This section will include this component HOOK function *************/
 
@@ -74,16 +70,9 @@ export const StorageCabinet: React.FC<StorageCabinetProps> = ({ handleChange, va
     let classStr = "storageCabinet_wrap";
     let mainEl = <></>;
 
-    const valueData = deepCloneData(value);
-
     if (isMobile) {
         mainEl = is375 ? (
-            <Mobile
-                value={valueData}
-                handleChange={handleChange}
-                handleColorChange={handleColorChange}
-                colors={list}
-            />
+            <Mobile colors={list} />
         ) : (
             <Tablet
                 value={valueData}

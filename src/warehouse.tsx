@@ -3,30 +3,26 @@
 
 import React from "react";
 import { Product } from "./product";
-import { deepCloneData, DragData, HandleChangeFn } from "./unit";
 import { comms } from ".";
 import { useMContext } from "./context";
 import { ScrollComponent } from "./Scroll";
 /* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
 /* <------------------------------------ **** INTERFACE START **** ------------------------------------ */
 
-// const fruits = options.map(item => { const key = Object.keys(item)[0]; return item[key] });
-
 /** This section will include all the interface for this tsx file */
-export interface WarehouseProps {
-    handleChange: HandleChangeFn;
-    value?: DragData;
-}
+
 /* <------------------------------------ **** INTERFACE END **** ------------------------------------ */
 /* <------------------------------------ **** FUNCTION COMPONENT START **** ------------------------------------ */
-export const Warehouse: React.FC<WarehouseProps> = ({ handleChange, value }) => {
+export const Warehouse: React.FC = () => {
     const { isMobile } = useMContext();
 
     const params = comms.config.options?.[1] || [];
 
-    const handleUp = () => {
-        handleChange(undefined);
-    };
+    const content = (
+        <div className="warehouse_body">
+            <Product list={params} />
+        </div>
+    );
 
     return (
         <div className="warehouse_wrap">
@@ -39,17 +35,7 @@ export const Warehouse: React.FC<WarehouseProps> = ({ handleChange, value }) => 
             </div>
 
             {isMobile ? (
-                <div className="warehouse_items">
-                    <div className="warehouse_body">
-                        <Product
-                            list={params}
-                            placement="warehouse"
-                            handleChange={handleChange}
-                            value={deepCloneData(value)}
-                            onUp={handleUp}
-                        />
-                    </div>
-                </div>
+                <div className="warehouse_items">{content}</div>
             ) : (
                 <ScrollComponent
                     className="warehouse_scrollWrap"
@@ -58,15 +44,7 @@ export const Warehouse: React.FC<WarehouseProps> = ({ handleChange, value }) => 
                         x: true,
                     }}
                 >
-                    <div className="warehouse_body">
-                        <Product
-                            list={params}
-                            placement="warehouse"
-                            handleChange={handleChange}
-                            value={deepCloneData(value)}
-                            onUp={handleUp}
-                        />
-                    </div>
+                    {content}
                 </ScrollComponent>
             )}
         </div>

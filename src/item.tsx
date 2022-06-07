@@ -4,52 +4,31 @@ import React from "react";
 import { useMContext } from "./context";
 import { Product } from "./product";
 import { ScrollComponent } from "./Scroll";
-import { deepCloneData, DragData, HandleChangeFn, OptionProps } from "./unit";
+import { deepCloneData, OptionProps } from "./unit";
 /* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
 /* <------------------------------------ **** INTERFACE START **** ------------------------------------ */
 /** This section will include all the interface for this tsx file */
 export interface ItemProps {
-    handleChange: HandleChangeFn;
-    value?: DragData;
     values?: OptionProps;
-    onUp: (res: OptionProps | undefined) => void;
     index: number;
 }
 /* <------------------------------------ **** INTERFACE END **** ------------------------------------ */
 /* <------------------------------------ **** FUNCTION COMPONENT START **** ------------------------------------ */
-export const Item: React.FC<ItemProps> = ({ handleChange, value, values, onUp, index }) => {
+export const Item: React.FC<ItemProps> = ({ values, index }) => {
     /* <------------------------------------ **** STATE START **** ------------------------------------ */
     /************* This section will include this component HOOK function *************/
 
     const { isMobile } = useMContext();
-
+    const content = (
+        <div className="scrollBody">
+            <Product list={values ? [deepCloneData(values)] : []} index={index} />
+        </div>
+    );
     /* <------------------------------------ **** FUNCTION END **** ------------------------------------ */
     return isMobile ? (
-        <div className="mobileScroll">
-            <div className="scrollBody">
-                <Product
-                    list={values ? [deepCloneData(values)] : []}
-                    handleChange={handleChange}
-                    value={deepCloneData(value)}
-                    index={index}
-                    onUp={onUp}
-                    placement="storageCabinet"
-                />
-            </div>
-        </div>
+        <div className="mobileScroll">{content}</div>
     ) : (
-        <ScrollComponent hidden={{ x: true, y: false }}>
-            <div className="scrollBody">
-                <Product
-                    list={values ? [deepCloneData(values)] : []}
-                    handleChange={handleChange}
-                    value={deepCloneData(value)}
-                    index={index}
-                    onUp={onUp}
-                    placement="storageCabinet"
-                />
-            </div>
-        </ScrollComponent>
+        <ScrollComponent hidden={{ x: true, y: false }}>{content}</ScrollComponent>
     );
 };
 /* <------------------------------------ **** FUNCTION COMPONENT END **** ------------------------------------ */

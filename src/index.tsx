@@ -2,11 +2,10 @@ import "./font";
 import "./style.scss";
 
 import { Warehouse } from "./warehouse";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { StorageCabinet } from "./storageCabinet";
-import { Context } from "./context";
+import { BasketUpFnProps, Context, MoveFnProps, ValueChangeFnProps } from "./context";
 import { isMobile } from "./isMobile";
-import { deepCloneData, DragData, OptionProps, PointProps } from "./unit";
 import hr from "./Assets/svg/hr.svg";
 import { PluginComms, ConfigYML } from "@possie-engine/dr-plugin-sdk";
 
@@ -25,13 +24,20 @@ export const comms = new PluginComms({
 const Main: React.FC = () => {
     /* <------------------------------------ **** STATE START **** ------------------------------------ */
     /************* This section will include this component HOOK function *************/
-    const [selectItem, setSelectItem] = useState<DragData>();
-
-    const status = useRef<{ index: number; val: OptionProps }>();
 
     const [mobileStatus, setMobileStatus] = useState(isMobile);
 
-    const [position, setPosition] = useState<PointProps>();
+    const [position, setPosition] = useState<MoveFnProps>();
+
+    const [selectValue, setSelectValue] = useState<ValueChangeFnProps>();
+
+    const basketFn = useRef<{
+        move: (x: number, y: number) => undefined;
+        up: (res: BasketUpFnProps) => undefined;
+    }>({
+        move: () => undefined,
+        up: () => undefined,
+    });
 
     /* <------------------------------------ **** STATE END **** ------------------------------------ */
     /* <------------------------------------ **** PARAMETER START **** ------------------------------------ */
@@ -50,6 +56,12 @@ const Main: React.FC = () => {
     /* <------------------------------------ **** PARAMETER END **** ------------------------------------ */
     /* <------------------------------------ **** FUNCTION START **** ------------------------------------ */
     /************* This section will include this component general function *************/
+
+    const handleMoveCallback = useCallback((res?: MoveFnProps) => setPosition(res), []);
+
+    const handleValueChangeCallback = useCallback((res?: ValueChangeFnProps) => {
+        setSelectValue(res);
+    }, []);
     /* <------------------------------------ **** FUNCTION END **** ------------------------------------ */
     return (
         <div className="wrapper">
@@ -69,18 +81,13 @@ const Main: React.FC = () => {
             </div>
             <Context.Provider
                 value={{
-                    mouseUpOnStorage: status,
                     isMobile: mobileStatus,
-                    position,
-                    setPosition,
+                    handleMoveCallback,
+                    handleValueChangeCallback,
+                    basketFn,
                 }}
             >
-                <Warehouse
-                    handleChange={(res) => {
-                        setSelectItem(deepCloneData(res));
-                    }}
-                    value={deepCloneData(selectItem)}
-                />
+                <Warehouse />
                 <div className="hr">
                     <div className="hr_left" />
                     <div
@@ -91,23 +98,18 @@ const Main: React.FC = () => {
                     />
                     <div className="hr_right" />
                 </div>
-                <StorageCabinet
-                    handleChange={(res) => {
-                        setSelectItem(deepCloneData(res));
-                    }}
-                    value={deepCloneData(selectItem)}
-                />
-                {!!position && (
+                <StorageCabinet />
+                {!!selectValue && (
                     <div
                         className="floating"
                         style={{
-                            left: `${position.x}px`,
-                            top: `${position.y}px`,
-                            width: `${position.width}px`,
-                            height: `${position.height}px`,
+                            left: `${position?.x ?? 0}px`,
+                            top: `${position?.y ?? 0}px`,
+                            width: `${selectValue.width}px`,
+                            height: `${selectValue.height}px`,
                         }}
                         dangerouslySetInnerHTML={{
-                            __html: selectItem?.content ?? "",
+                            __html: selectValue?.content ?? "",
                         }}
                     />
                 )}
