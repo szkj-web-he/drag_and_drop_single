@@ -189,6 +189,9 @@ body {
     @include Item();
     position: relative;
     &.gray {
+        * {
+            visibility: hidden;
+        }
         overflow: hidden;
         background-color: #ebebeb;
         background-image: none;
