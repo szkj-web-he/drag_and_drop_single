@@ -1,24 +1,13 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { useMContext } from "../context";
+import React, { useEffect, useRef, useState } from "react";
 import { Item } from "../item";
 import { ScrollComponent } from "../Scroll";
 import { DeskProps } from "./desk";
-import { useListenPosition } from "../useListenPosition";
 import bg from "../Assets/svg/bg_product.svg";
 import bg1 from "../Assets/svg/bg_product1.svg";
 import Arrow from "../arrow";
 import ArrowBg from "../arrowBg";
 
-export const SmallDesk: React.FC<DeskProps> = ({
-    colors,
-    handleChange,
-    value,
-    handleColorChange,
-}) => {
-    const listRef = useRef([...colors]);
-
-    const { mouseUpOnStorage } = useMContext();
-
+export const SmallDesk: React.FC<DeskProps> = ({ colors, activeIndex }) => {
     const ref = useRef<HTMLDivElement | null>(null);
 
     const scrollEl = useRef<HTMLDivElement | null>(null);
@@ -33,12 +22,6 @@ export const SmallDesk: React.FC<DeskProps> = ({
      * 2 在起点或终点之间
      */
     const [scrollStatus, setScrollStatus] = useState<0 | 1 | 2>(0);
-
-    useListenPosition(ref);
-
-    useLayoutEffect(() => {
-        listRef.current = [...colors];
-    }, [colors]);
 
     useEffect(() => {
         const fn = () => {
@@ -120,6 +103,7 @@ export const SmallDesk: React.FC<DeskProps> = ({
             behavior: "smooth",
         });
     };
+
     const toRight = () => {
         if (scrollStatus === 1) return;
         const node = getScrollEl();
@@ -137,21 +121,6 @@ export const SmallDesk: React.FC<DeskProps> = ({
             left: node.scrollLeft + itemWidth,
             behavior: "smooth",
         });
-    };
-
-    const handleMouseUp = (n: number) => {
-        if (!value) return;
-        const arr = [...listRef.current];
-        arr[n].value = {
-            code: value.code,
-            content: value.content,
-        };
-        handleColorChange([...arr]);
-
-        mouseUpOnStorage.current = {
-            index: n,
-            val: value,
-        };
     };
 
     const handleScroll = ({
@@ -213,19 +182,6 @@ export const SmallDesk: React.FC<DeskProps> = ({
         });
     };
 
-    const handleUp = (n: number) => {
-        const data = mouseUpOnStorage.current;
-        handleChange(undefined);
-        if (n === data?.index) {
-            return;
-        }
-
-        const arr = [...listRef.current];
-        arr[n].value = undefined;
-
-        handleColorChange([...arr]);
-    };
-
     return (
         <>
             {showBtn && (
@@ -280,10 +236,11 @@ export const SmallDesk: React.FC<DeskProps> = ({
                     {colors.map((item, n) => {
                         return (
                             <div
-                                className="storageCabinet_item"
+                                className={`storageCabinet_item${
+                                    activeIndex === n ? " active" : ""
+                                }`}
                                 key={item.code}
                                 data-i={n}
-                                onMouseUp={() => handleMouseUp(n)}
                             >
                                 <div
                                     className="storageCabinet_itemBg"
@@ -304,13 +261,7 @@ export const SmallDesk: React.FC<DeskProps> = ({
 
                                 <div className="storageCabinet_itemTitle">{item.content}</div>
                                 <div className="storageCabinet_itemValues">
-                                    <Item
-                                        values={item.value}
-                                        handleChange={handleChange}
-                                        onUp={() => handleUp(n)}
-                                        index={n}
-                                        value={value}
-                                    />
+                                    <Item values={item.value} index={n} />
                                 </div>
                             </div>
                         );

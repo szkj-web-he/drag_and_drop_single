@@ -1,17 +1,13 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ListItemProps } from "../storageCabinet";
-import { useMContext } from "../context";
 import { Item } from "../item";
 import { addClass, getMatrixAttr, getTransitionAttr, removeClass } from "../unit";
 import { DeskProps } from "./desk";
-import { useListenPosition } from "../useListenPosition";
 import bg from "../Assets/svg/bg_product.svg";
 import bg1 from "../Assets/svg/bg_product1.svg";
 
-export const Tablet: React.FC<DeskProps> = ({ colors, handleChange, value, handleColorChange }) => {
+export const Tablet: React.FC<DeskProps> = ({ colors, activeIndex }) => {
     const listRef = useRef([...colors]);
-
-    const { mouseUpOnStorage } = useMContext();
 
     const [currentPage, setCurrentPage] = useState(0);
 
@@ -43,45 +39,6 @@ export const Tablet: React.FC<DeskProps> = ({ colors, handleChange, value, handl
         status: null,
         startX: 0,
     });
-
-    const handleColorChangeFn = useRef(handleColorChange);
-
-    useLayoutEffect(() => {
-        handleColorChangeFn.current = handleColorChange;
-    }, [handleColorChange]);
-
-    useLayoutEffect(() => {
-        listRef.current = [...colors];
-    }, [colors]);
-
-    useListenPosition(ref, "tablet");
-
-    /**
-     * touch 事件的穿透处理
-     * 本无穿透
-     * 做穿透处理
-     */
-    useEffect(() => {
-        const fn = () => {
-            if (mouseUpOnStorage.current) {
-                const data = mouseUpOnStorage.current;
-                const n = data.index;
-
-                const arr = [...listRef.current];
-                arr[n].value = {
-                    code: data.val.code,
-                    content: data.val.content,
-                };
-
-                handleColorChangeFn.current([...arr]);
-            }
-        };
-        document.addEventListener("touchend", fn);
-
-        return () => {
-            document.removeEventListener("touchend", fn);
-        };
-    }, [mouseUpOnStorage]);
 
     useEffect(() => {
         return () => {
@@ -372,18 +329,6 @@ export const Tablet: React.FC<DeskProps> = ({ colors, handleChange, value, handl
         }
     });
 
-    const handleUp = (n: number) => {
-        const data = mouseUpOnStorage.current;
-        handleChange(undefined);
-        if (n === data?.index) {
-            return;
-        }
-        const arr = [...listRef.current];
-        arr[n].value = undefined;
-
-        handleColorChangeFn.current([...arr]);
-    };
-
     return (
         <div className="tablet_colorWrap">
             <div className="tablet_colorContainer" onTouchStart={handleTouchStart}>
@@ -394,7 +339,9 @@ export const Tablet: React.FC<DeskProps> = ({ colors, handleChange, value, handl
                                 {colorArr.map((item, index) => {
                                     return (
                                         <li
-                                            className="storageCabinet_item"
+                                            className={`storageCabinet_item${
+                                                activeIndex === n * 6 + index ? " active" : ""
+                                            }`}
                                             key={item.code}
                                             data-i={n * 6 + index}
                                         >
@@ -418,13 +365,7 @@ export const Tablet: React.FC<DeskProps> = ({ colors, handleChange, value, handl
                                                 {item.content}
                                             </div>
                                             <div className="storageCabinet_itemValues">
-                                                <Item
-                                                    values={item.value}
-                                                    handleChange={handleChange}
-                                                    onUp={() => handleUp(n * 6 + index)}
-                                                    index={n * 6 + index}
-                                                    value={value}
-                                                />
+                                                <Item values={item.value} index={n * 6 + index} />
                                             </div>
                                         </li>
                                     );
