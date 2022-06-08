@@ -52,7 +52,7 @@ const Main: React.FC = () => {
     /************* This section will include this component general function *************/
     /* <------------------------------------ **** FUNCTION END **** ------------------------------------ */
     return (
-        <div className="wrapper">
+        <div className={`wrapper${mobileStatus ? " mobile" : ""}`}>
             <div className="question">
                 <div
                     className="questionContent"
