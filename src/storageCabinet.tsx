@@ -43,9 +43,18 @@ export const StorageCabinet: React.FC = () => {
     const indexRef = useRef<number>();
     const [activeIndex, setActiveIndex] = useState(indexRef.current);
 
+    useEffect(() => {
+        const data: Record<string, string | null> = {};
+        for (let i = 0; i < list.length; i++) {
+            const item = list[i];
+            data[item.code] = item.value?.code ?? null;
+        }
+        comms.state = data;
+    }, [list]);
     /* <------------------------------------ **** STATE END **** ------------------------------------ */
     /* <------------------------------------ **** PARAMETER START **** ------------------------------------ */
     /************* This section will include this component parameter *************/
+
     useLayoutEffect(() => {
         let timer: null | number = null;
         const findIndex = (x: number, y: number) => {
