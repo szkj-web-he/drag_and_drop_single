@@ -2,12 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { Item } from "../item";
 import { ScrollComponent } from "../Scroll";
 import { DeskProps } from "./desk";
-import flower from "../Assets/svg/lotus_flower.svg";
-import Iframe from "../typeIcon";
 import Arrow from "../arrow";
-import ArrowBg from "../arrowBg";
+import Box from "./container";
 
-export const SmallDesk: React.FC<DeskProps> = ({ colors, activeIndex }) => {
+export const SmallDesk: React.FC<DeskProps> = ({ colors, activeIndex, children }) => {
     const ref = useRef<HTMLDivElement | null>(null);
 
     const scrollEl = useRef<HTMLDivElement | null>(null);
@@ -189,14 +187,12 @@ export const SmallDesk: React.FC<DeskProps> = ({ colors, activeIndex }) => {
                         className={`arrowContainer_pre${scrollStatus === 0 ? " gray" : ""}`}
                         onClick={toLeft}
                     >
-                        <ArrowBg className="arrowContainer_bgIcon" />
                         <Arrow className="arrowContainer_icon" />
                     </div>
                     <div
                         className={`arrowContainer_next${scrollStatus === 1 ? " gray" : ""}`}
                         onClick={toRight}
                     >
-                        <ArrowBg className="arrowContainer_bgIcon" />
                         <Arrow className="arrowContainer_icon" />
                     </div>
                 </div>
@@ -211,29 +207,18 @@ export const SmallDesk: React.FC<DeskProps> = ({ colors, activeIndex }) => {
                     y: true,
                 }}
             >
+                {children}
                 <div className="storageCabinet_smallDeskRow" ref={ref}>
                     {colors.map((item, n) => {
                         return (
-                            <div
-                                className={`storageCabinet_item${
-                                    activeIndex === n ? " active" : ""
-                                }`}
-                                key={item.code}
-                                data-i={n}
+                            <Box
+                                index={n}
+                                key={`${item.code}`}
+                                isActive={activeIndex === n}
+                                title={item.content}
                             >
-                                <Iframe className="storageCabinet_view" />
-                                <div
-                                    className="storageCabinet_itemBg"
-                                    dangerouslySetInnerHTML={{
-                                        __html: flower,
-                                    }}
-                                />
-
-                                <div className="storageCabinet_itemTitle">{item.content}</div>
-                                <div className="storageCabinet_itemValues">
-                                    <Item values={item.value} index={n} />
-                                </div>
-                            </div>
+                                <Item values={item.value} index={n} />
+                            </Box>
                         );
                     })}
                 </div>

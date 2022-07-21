@@ -3,10 +3,9 @@ import { ListItemProps } from "../storageCabinet";
 import { Item } from "../item";
 import { addClass, getMatrixAttr, getTransitionAttr, removeClass } from "../unit";
 import { DeskProps } from "./desk";
-import flower from "../Assets/svg/lotus_flower.svg";
-import Iframe from "../typeIcon";
+import Box from "./container";
 
-export const Tablet: React.FC<DeskProps> = ({ colors, activeIndex }) => {
+export const Tablet: React.FC<DeskProps> = ({ colors, activeIndex, children }) => {
     const listRef = useRef([...colors]);
 
     const [currentPage, setCurrentPage] = useState(0);
@@ -336,34 +335,22 @@ export const Tablet: React.FC<DeskProps> = ({ colors, activeIndex }) => {
     return (
         <div className="tablet_colorWrap">
             <div className="tablet_colorContainer" onTouchStart={handleTouchStart}>
+                {children}
                 <div className="tablet_colorContent" ref={ref}>
                     {colorList.map((colorArr, n) => {
                         return (
                             <ul key={n} className="tablet_colorList">
                                 {colorArr.map((item, index) => {
                                     return (
-                                        <li
-                                            className={`storageCabinet_item${
-                                                activeIndex === n * 6 + index ? " active" : ""
-                                            }`}
-                                            key={item.code}
-                                            data-i={n * 6 + index}
+                                        <Box
+                                            index={n * 6 + index}
+                                            key={`${item.code}`}
+                                            tag="li"
+                                            isActive={activeIndex === n * 6 + index}
+                                            title={item.content}
                                         >
-                                            <Iframe className="storageCabinet_view" />
-                                            <div
-                                                className="storageCabinet_itemBg"
-                                                dangerouslySetInnerHTML={{
-                                                    __html: flower,
-                                                }}
-                                            />
-
-                                            <div className="storageCabinet_itemTitle">
-                                                {item.content}
-                                            </div>
-                                            <div className="storageCabinet_itemValues">
-                                                <Item values={item.value} index={n * 6 + index} />
-                                            </div>
-                                        </li>
+                                            <Item values={item.value} index={n * 6 + index} />
+                                        </Box>
                                     );
                                 })}
                             </ul>

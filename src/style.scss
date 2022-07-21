@@ -17,8 +17,7 @@ $mobileSpan: calc(calc(100vw - 16px * 2 - 11 * 20px - 24px * 2) / 12);
 }
 
 @mixin TypeBackground {
-    background-color: rgba(#f9fbfb, 0.7);
-    border-radius: 10px;
+    position: relative;
 }
 
 html,
@@ -61,11 +60,11 @@ body {
     line-height: 21px;
     font-family: $fontFamily;
     letter-spacing: 0.2px;
-    color: #212121;
+    color: #fafafa;
 }
 
 .warehouse_totalVal {
-    color: #22a6b3;
+    color: #57f1f1;
     margin: 0 5px;
 
     &.red {
@@ -92,6 +91,7 @@ body {
 .warehouse_scrollWrap {
     margin-top: 8px;
     box-sizing: border-box;
+
     &.scroll_scrollContainer {
         height: auto;
     }
@@ -100,32 +100,20 @@ body {
 .hr {
     width: 100%;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
     flex-flow: row nowrap;
     margin-top: 10px;
 }
 
-.hr_left {
-    width: calc(50% - 3px);
-    height: 1px;
-    background-color: #3d9999;
+.hr_icon {
+    width: calc(100% - 11px);
+    height: 13px;
 }
 
-.hr_right {
-    width: calc(50% - 3px);
-    height: 1px;
-    background-color: #3d9999;
-}
-
-.hr_split {
-    width: 20.07px;
-    height: 14.87px;
-    transform: translateY(-5px);
-    svg {
-        width: 100%;
-        height: 100%;
-    }
+.hr_last {
+    margin-left: 3px;
+    transform: translateY(2px);
 }
 
 .warehouse_scrollBody {
@@ -139,6 +127,7 @@ body {
     align-content: flex-start;
     flex-flow: row wrap;
 }
+
 @mixin ItemBg {
     position: absolute;
     border-radius: 9px;
@@ -153,6 +142,7 @@ body {
     align-items: center;
     justify-content: center;
     flex-flow: row nowrap;
+
     svg {
         flex: 0 0 auto;
         width: 100%;
@@ -161,41 +151,50 @@ body {
 }
 
 @mixin Item {
-    padding: 7px 13px;
     display: inline-flex;
+    border-radius: 6px;
     touch-action: none;
     max-width: 100%;
     flex: 0 0 auto;
     box-sizing: border-box;
-    word-wrap: break-word;
-    word-break: break-word;
-    white-space: pre-wrap;
-    flex-flow: row wrap;
-    background-image: url("./Assets/img/product_btn.png");
-    background-size: calc(100% - 2px) calc(100% - 2px);
-    background-position: center;
-    background-repeat: no-repeat;
-    font-family: $fontFamily;
-    font-size: 14px;
-    line-height: 21px;
-    letter-spacing: 0.2px;
-    position: relative;
     z-index: 7;
-    color: #4d4d4d;
+    color: #fafafa;
+    .itemBg {
+        position: absolute;
+        z-index: 1;
+        left: 0;
+        top: 0;
+    }
+    .itemContent {
+        position: relative;
+        z-index: 2;
+        padding: 8px 12px;
+        font-family: $fontFamily;
+        font-size: 14px;
+        line-height: 21px;
+        letter-spacing: 0.2px;
+        box-sizing: border-box;
+        word-wrap: break-word;
+        word-break: break-word;
+        white-space: pre-wrap;
+        flex-flow: row wrap;
+        overflow: hidden;
+    }
 }
 
 .item {
     cursor: pointer;
     @include Item();
     position: relative;
+
     &.gray {
+        overflow: hidden;
+        background-color: rgba(#fff, 0.2);
+        background-image: none;
+        color: transparent;
         * {
             visibility: hidden;
         }
-        overflow: hidden;
-        background-color: #ebebeb;
-        background-image: none;
-        color: transparent;
     }
 }
 
@@ -204,8 +203,6 @@ body {
     position: absolute;
     z-index: 50;
     pointer-events: none;
-    background-color: #e8f0f0;
-    box-shadow: 0px 2px 6px rgba(26, 26, 26, 0.06), 0px 3px 15px rgba(26, 26, 26, 0.1);
 }
 
 .storageCabinet_row {
@@ -219,7 +216,7 @@ body {
 }
 
 .storageCabinet_total {
-    color: #212121;
+    color: #fafafa;
     font-family: $fontFamily;
     letter-spacing: 0.2px;
     font-weight: 400;
@@ -227,9 +224,10 @@ body {
     line-height: 21px;
     margin-top: 32px;
     margin-bottom: 12px;
+
     span {
         padding: 0 5px;
-        color: #22a6b3;
+        color: rgba(87, 241, 241, 1);
     }
 }
 
@@ -239,22 +237,13 @@ body {
     height: 48px;
     bottom: -7px;
     right: -14px;
+
     svg {
         width: 100%;
         height: 100%;
     }
-    z-index: 1;
-}
 
-.storageCabinet_view {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 0;
-    width: 100%;
-    height: 100%;
-    color: transparent;
-    transition: all 0.2s linear;
+    z-index: 1;
 }
 
 .storageCabinet_item {
@@ -269,22 +258,21 @@ body {
 
     position: relative;
 
-    .item {
-        background-color: #fff;
+    background: #0e446f;
+    box-shadow: inset 0px 4px 35px rgba(0, 143, 188, 0.25);
+    border-radius: 6px;
+    &.active {
+        box-shadow: inset 0px 4px 35px rgba(0, 143, 188, 0.25),
+            0 0 5px 1px rgba(255, 255, 255, 0.25);
     }
 
-    &.active {
-        .storageCabinet_view {
-            color: #e9f7f8;
-        }
-    }
     &:first-child {
         margin-left: 0;
     }
 }
 
 .storageCabinet_itemTitle {
-    color: #4d7c7c;
+    color: #57f1f1;
     letter-spacing: 0.2px;
     font-weight: 500;
     font-size: 14px;
@@ -316,14 +304,17 @@ body {
     height: calc(100% - 21px - 10px);
     position: relative;
     z-index: 7;
+
     .item {
         margin-right: 16px;
 
         margin-bottom: 12px;
     }
+
     .scroll_scrollBar__vertical {
         right: 6px !important;
     }
+
     .scroll_scrollBody {
         padding: 0 16px;
         box-sizing: border-box;
@@ -361,10 +352,12 @@ body {
 .storageCabinet_wrap {
     width: 100%;
     overflow: hidden;
+
     &.desk {
         .storageCabinet_row {
             padding: 0 8px 20px 8px;
         }
+
         .storageCabinet_item {
             margin: 20px 12px 0 12px;
         }
@@ -377,16 +370,19 @@ body {
             margin-right: 24px;
             margin-left: 0;
             margin-top: 20px;
+
             &:nth-child(3n) {
                 margin-right: 0;
             }
         }
     }
+
     &.mobile {
         .storageCabinet_item {
             @include mobileGridCol(6);
             height: 180px;
             margin-left: 20px;
+
             &:first-of-type {
                 margin-left: 0;
             }
@@ -420,44 +416,29 @@ body {
 }
 
 @mixin Arrow {
-    width: 31.21px;
-    height: 31.21px;
-    position: relative;
+    width: 30px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-flow: row nowrap;
     cursor: pointer;
-    background: rgba(103, 205, 214, 0.1);
     border-radius: 50%;
     box-sizing: border-box;
-    .arrowContainer_bgIcon {
-        position: absolute;
-        color: #22a6b3;
-        transition: all 0.2s linear;
-        width: 34px;
-        height: 33px;
-        top: -1.21px;
-    }
+    border: 1px solid #487bd1;
 
     .arrowContainer_icon {
-        position: relative;
-        z-index: 5;
         width: 16px;
         height: 12px;
-        color: #22a6b3;
+        color: #487bd1;
         transition: all 0.2s linear;
     }
-    &.gray {
-        background: rgba(255, 255, 255, 0.5);
-        border-color: #bdbdbd;
 
-        .arrowContainer_bgIcon {
-            color: #bdbdbd;
-        }
+    &.gray {
+        border-color: #57f1f1;
 
         .arrowContainer_icon {
-            color: #bdbdbd;
+            color: #57f1f1;
         }
     }
 }
@@ -466,10 +447,6 @@ body {
     margin-right: 20px;
     @include Arrow();
 
-    .arrowContainer_bgIcon {
-        left: -2px;
-        transform: rotateY(180deg);
-    }
     .arrowContainer_icon {
         transform: rotate(180deg);
     }
@@ -477,9 +454,6 @@ body {
 
 .arrowContainer_next {
     @include Arrow();
-    .arrowContainer_bgIcon {
-        right: -2px;
-    }
 }
 
 .smallDesk_scrollWrap {
@@ -528,6 +502,7 @@ body {
     box-sizing: border-box;
     width: 100%;
     flex: 0 0 auto;
+
     .storageCabinet_item {
         list-style: none;
     }
@@ -558,9 +533,11 @@ body {
     margin-right: 8px;
     transition: all 0.5s linear;
     cursor: pointer;
+
     &:last-child {
         margin: 0;
     }
+
     &.active {
         width: 40px;
         background: #bdbdbd;
@@ -576,8 +553,13 @@ body {
 .mobile_colorWrap {
     width: 100%;
     height: 212px;
-    overflow: auto;
     @include TypeBackground();
+}
+
+.mobile_scrollContainer {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
 }
 
 .mobile_colorContainer {
@@ -596,6 +578,7 @@ body {
 
 .warehouse_body {
     width: calc(100% + 20px);
+
     > .item {
         margin-right: 20px;
         margin-bottom: 16px;
@@ -616,7 +599,7 @@ body {
 }
 
 .questionContent {
-    color: #212121;
+    color: #57f1f1;
     font-family: $fontFamily;
     font-style: normal;
     font-weight: 500;
@@ -626,7 +609,7 @@ body {
 }
 
 .questionDes {
-    color: #757575;
+    color: #72bbbb;
     font-family: $fontFamily;
     font-style: normal;
     font-weight: 400;
@@ -635,40 +618,26 @@ body {
     letter-spacing: 0.2px;
 }
 
-@mixin tipsMask {
+.frame {
     position: absolute;
-    left: 0;
-    width: 100%;
-    height: 48px;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-flow: row nowrap;
-    transition: all 0.2s linear;
-}
-
-.storageCabinet_deskTopTips {
-    @include tipsMask();
     top: 0;
-    background: linear-gradient(
-        180deg,
-        rgba(51, 51, 51, 0.2) -64.58%,
-        rgba(51, 51, 51, 0.05) 135.42%
-    );
-    border-radius: 6px 6px 0px 0px;
-    .storageCabinet_img {
-        transform: rotate(180deg);
-    }
+    left: 0;
+    z-index: 2;
+    pointer-events: none;
 }
 
-.storageCabinet_deskBottomTips {
-    @include tipsMask();
-    bottom: 0;
-    background: linear-gradient(
-        360deg,
-        rgba(51, 51, 51, 0.2) -64.58%,
-        rgba(51, 51, 51, 0.05) 135.42%
-    );
-    border-radius: 0px 0px 6px 6px;
+.storageCabinet_itemBg_lt {
+    position: absolute;
+    top: -1px;
+    left: -3px;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.storageCabinet_itemBg_rb {
+    position: absolute;
+    bottom: -3px;
+    right: -1px;
+    pointer-events: none;
+    z-index: 3;
 }

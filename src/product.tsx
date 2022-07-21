@@ -5,7 +5,7 @@ import { stopSelect } from "./noSelected";
 import { useMContext } from "./context";
 import { getScrollValue } from "./getScrollValue";
 import { deepCloneData, OptionProps } from "./unit";
-
+import Frame from "./itemFrame";
 /* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
 /* <------------------------------------ **** INTERFACE START **** ------------------------------------ */
 /** This section will include all the interface for this tsx file */
@@ -199,10 +199,16 @@ export const Product: React.FC<ProductProps> = ({ list, index }) => {
                                       handleMouseDown(item, e);
                                   },
                               })}
-                        dangerouslySetInnerHTML={{
-                            __html: item.content,
-                        }}
-                    />
+                    >
+                        <Frame className={`itemBg`} />
+
+                        <div
+                            className={`itemContent`}
+                            dangerouslySetInnerHTML={{
+                                __html: item.content,
+                            }}
+                        />
+                    </div>
                 );
             })}
         </>

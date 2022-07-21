@@ -1,19 +1,12 @@
 const path = require("path");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-    entry: { main: `./src/${process.env.APPLICATION_ENTRY_POINT || "index"}` },
-    mode: "production",
     output: {
         path: path.join(__dirname, "dist"),
         filename: "[contenthash].js",
         hashFunction: "sha256",
     },
-    devtool: "source-map",
     resolve: {
-        extensions: [".tsx", ".ts", ".jsx", ".js"],
-        modules: [path.resolve(__dirname, "src"), path.resolve(__dirname, "node_modules")],
         fallback: {
             assert: require.resolve("assert"),
             buffer: require.resolve("buffer"),
@@ -40,12 +33,7 @@ module.exports = {
             zlib: require.resolve("browserify-zlib"),
         },
     },
-    optimization: {
-        splitChunks: {
-            chunks: "all",
-            filename: "[contenthash].js",
-        },
-    },
+
     module: {
         rules: [
             {
@@ -53,34 +41,16 @@ module.exports = {
                 type: "asset/source",
             },
             {
-                test: /\.jsx?$/i,
-                exclude: /node_modules/,
-                use: ["babel-loader", "thread-loader"],
-            },
-            {
-                test: /\.tsx?$/i,
-                use: [
-                    {
-                        loader: "ts-loader",
-                        options: {
-                            transpileOnly: true,
-                        },
-                    },
-                    "thread-loader",
-                ],
-            },
-            {
-                test: /\.css$/i,
-                use: [MiniCssExtractPlugin.loader, "css-loader"],
-            },
-            {
-                test: /\.s[ac]ss$/i,
-                use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
-            },
-            {
                 test: /\.ya?ml$/i,
                 type: "json",
-                use: "yaml-loader",
+                use: [
+                    {
+                        loader: "yaml-loader",
+                        options: {
+                            asJSON: true,
+                        },
+                    },
+                ],
             },
             {
                 test: /\.svg$/i,
@@ -96,21 +66,4 @@ module.exports = {
             },
         ],
     },
-    experiments: {
-        asyncWebAssembly: true,
-        syncWebAssembly: true,
-    },
-    //测 包文件时打开
-    snapshot: {
-        managedPaths: [],
-    },
-    plugins: [
-        new MiniCssExtractPlugin({
-            filename: "[contenthash].css",
-        }),
-        new HtmlWebpackPlugin({
-            title: "Plugin",
-            filename: "index.html",
-        }),
-    ],
 };

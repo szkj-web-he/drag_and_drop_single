@@ -3,6 +3,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useMContext } from "./context";
 import { comms } from ".";
+import Frame from "./frame";
 /* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
 /* <------------------------------------ **** INTERFACE START **** ------------------------------------ */
 /** This section will include all the interface for this tsx file */
@@ -128,15 +129,23 @@ export const StorageCabinet: React.FC = () => {
 
     if (isMobile) {
         mainEl = is375 ? (
-            <Mobile colors={list} activeIndex={activeIndex} />
+            <Mobile colors={list} activeIndex={activeIndex}>
+                <Frame />
+            </Mobile>
         ) : (
-            <Tablet colors={list} activeIndex={activeIndex} />
+            <Tablet colors={list} activeIndex={activeIndex}>
+                <Frame />
+            </Tablet>
         );
     } else {
         mainEl = is1024 ? (
-            <SmallDesk colors={list} activeIndex={activeIndex} />
+            <SmallDesk colors={list} activeIndex={activeIndex}>
+                <Frame />
+            </SmallDesk>
         ) : (
-            <Desk colors={list} activeIndex={activeIndex} />
+            <Desk colors={list} activeIndex={activeIndex}>
+                <Frame />
+            </Desk>
         );
     }
 

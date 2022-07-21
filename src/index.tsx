@@ -1,4 +1,3 @@
-import "./font";
 import "./style.scss";
 
 import { Warehouse } from "./warehouse";
@@ -6,8 +5,9 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { StorageCabinet } from "./storageCabinet";
 import { BasketUpFnProps, Context, MoveFnProps, ValueChangeFnProps } from "./context";
 import { isMobile } from "./isMobile";
-import hr from "./Assets/svg/hr.svg";
+import Hr from "./hr";
 import { PluginComms, ConfigYML } from "@possie-engine/dr-plugin-sdk";
+import Frame from "./itemFrame";
 
 export const comms = new PluginComms({
     defaultConfig: new ConfigYML(),
@@ -88,16 +88,7 @@ const Main: React.FC = () => {
                 }}
             >
                 <Warehouse />
-                <div className="hr">
-                    <div className="hr_left" />
-                    <div
-                        className="hr_split"
-                        dangerouslySetInnerHTML={{
-                            __html: hr,
-                        }}
-                    />
-                    <div className="hr_right" />
-                </div>
+                <Hr />
                 <StorageCabinet />
                 {!!selectValue && (
                     <div
@@ -108,10 +99,15 @@ const Main: React.FC = () => {
                             width: `${selectValue.width}px`,
                             height: `${selectValue.height}px`,
                         }}
-                        dangerouslySetInnerHTML={{
-                            __html: selectValue?.content ?? "",
-                        }}
-                    />
+                    >
+                        <Frame className={`itemBg`} />
+                        <div
+                            className={`itemContent`}
+                            dangerouslySetInnerHTML={{
+                                __html: selectValue?.content ?? "",
+                            }}
+                        />
+                    </div>
                 )}
             </Context.Provider>
         </div>
