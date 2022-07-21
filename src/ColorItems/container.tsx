@@ -8,8 +8,6 @@
 /** This section will include all the necessary dependence for this tsx file */
 import React, { ReactNode } from "react";
 import { createElement } from "react";
-import lt from "../Assets/img/icon_lt.png";
-import rb from "../Assets/img/icon_rb.png";
 /* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
 /* <------------------------------------ **** INTERFACE START **** ------------------------------------ */
 /** This section will include all the interface for this tsx file */
@@ -34,8 +32,6 @@ const Temp: React.FC<TempProps> = ({ isActive, children, title, index, tag }) =>
     /* <------------------------------------ **** FUNCTION END **** ------------------------------------ */
     const content = (
         <>
-            <img alt="" src={lt} className="storageCabinet_itemBg_lt" />
-            <img alt="" src={rb} className="storageCabinet_itemBg_rb" />
             <div className="storageCabinet_itemTitle">{title}</div>
             <div className="storageCabinet_itemValues">{children}</div>
         </>
