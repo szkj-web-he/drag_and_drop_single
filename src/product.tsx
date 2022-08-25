@@ -1,7 +1,7 @@
 /* <------------------------------------ **** DEPENDENCE IMPORT START **** ------------------------------------ */
 /** This section will include all the necessary dependence for this tsx file */
 import React, { memo, useRef, useState } from "react";
-import { createPortal, flushSync } from "react-dom";
+import { createPortal } from "react-dom";
 import { useMContext } from "./context";
 import { getScrollValue } from "./getScrollValue";
 import Frame from "./itemFrame";
@@ -47,29 +47,27 @@ export const Product: React.FC<ProductProps> = memo(
 
         // 当移动时
         const handleMove = (e: MouseEvent | React.TouchEvent<HTMLDivElement>) => {
-            flushSync(() => {
-                if (!selectValueRef.current) {
-                    return;
-                }
+            if (!selectValueRef.current) {
+                return;
+            }
 
-                let x = 0;
-                let y = 0;
+            let x = 0;
+            let y = 0;
 
-                if (e instanceof MouseEvent) {
-                    x = e.pageX;
-                    y = e.pageY;
-                    basketFn.current.move(e.clientX, e.clientY);
-                } else {
-                    const position = e.changedTouches[0];
-                    x = position.pageX;
-                    y = position.pageY;
-                    basketFn.current.move(position.clientX, position.clientY);
-                }
+            if (e instanceof MouseEvent) {
+                x = e.pageX;
+                y = e.pageY;
+                basketFn.current.move(e.clientX, e.clientY);
+            } else {
+                const position = e.changedTouches[0];
+                x = position.pageX;
+                y = position.pageY;
+                basketFn.current.move(position.clientX, position.clientY);
+            }
 
-                setTranslate({
-                    x: x - point.current.offsetX,
-                    y: y - point.current.offsetY,
-                });
+            setTranslate({
+                x: x - point.current.offsetX,
+                y: y - point.current.offsetY,
             });
         };
 
