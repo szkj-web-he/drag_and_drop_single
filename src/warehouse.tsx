@@ -1,11 +1,12 @@
 /* <------------------------------------ **** DEPENDENCE IMPORT START **** ------------------------------------ */
 /** This section will include all the necessary dependence for this tsx file */
 
-import React from "react";
-import { Product } from "./product";
+import React, { useMemo } from "react";
 import { comms } from ".";
-import { useMContext } from "./context";
+import { Product } from "./product";
+import Frame from "./frame";
 import { ScrollComponent } from "./Scroll";
+import { deepCloneData } from "./unit";
 /* <------------------------------------ **** DEPENDENCE IMPORT END **** ------------------------------------ */
 /* <------------------------------------ **** INTERFACE START **** ------------------------------------ */
 
@@ -14,9 +15,7 @@ import { ScrollComponent } from "./Scroll";
 /* <------------------------------------ **** INTERFACE END **** ------------------------------------ */
 /* <------------------------------------ **** FUNCTION COMPONENT START **** ------------------------------------ */
 export const Warehouse: React.FC = () => {
-    const { isMobile } = useMContext();
-
-    const params = comms.config.options?.[1] || [];
+    const params = useMemo(() => deepCloneData(comms.config.options?.[1] ?? []), []);
 
     const content = (
         <div className="warehouse_body">
@@ -34,9 +33,8 @@ export const Warehouse: React.FC = () => {
                 项
             </div>
 
-            {isMobile ? (
-                <div className="warehouse_items">{content}</div>
-            ) : (
+            <div className="warehouse_container">
+                <Frame type="top" />
                 <ScrollComponent
                     className="warehouse_scrollWrap"
                     bodyClassName="warehouse_scrollBody"
@@ -46,7 +44,7 @@ export const Warehouse: React.FC = () => {
                 >
                     {content}
                 </ScrollComponent>
-            )}
+            </div>
         </div>
     );
 };

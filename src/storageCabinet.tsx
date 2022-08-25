@@ -13,6 +13,7 @@ import { SmallDesk } from "./ColorItems/smallDesk";
 import { Tablet } from "./ColorItems/tablet";
 import { Mobile } from "./ColorItems/mobile";
 import { deepCloneData, OptionProps } from "./unit";
+import { isMobile } from "./isMobile";
 
 export interface ListItemProps {
     code: string;
@@ -25,7 +26,7 @@ export const StorageCabinet: React.FC = () => {
     /* <------------------------------------ **** STATE START **** ------------------------------------ */
     /************* This section will include this component HOOK function *************/
 
-    const { isMobile, basketFn } = useMContext();
+    const { basketFn } = useMContext();
 
     const [is1024, setIs1024] = useState(window.matchMedia("(max-width: 1000px)").matches);
 
@@ -43,6 +44,8 @@ export const StorageCabinet: React.FC = () => {
 
     const indexRef = useRef<number>();
     const [activeIndex, setActiveIndex] = useState(indexRef.current);
+
+    const [mobileStatus, setMobileStatus] = useState(isMobile());
 
     useEffect(() => {
         const data: Record<string, string | null> = {};
@@ -111,6 +114,7 @@ export const StorageCabinet: React.FC = () => {
 
     useEffect(() => {
         const fn = () => {
+            setMobileStatus(isMobile());
             setIs1024(window.matchMedia("(max-width: 1000px)").matches);
             setIs375(window.matchMedia("(max-width: 703px)").matches);
         };
@@ -127,29 +131,29 @@ export const StorageCabinet: React.FC = () => {
     let classStr = "storageCabinet_wrap";
     let mainEl = <></>;
 
-    if (isMobile) {
+    if (mobileStatus) {
         mainEl = is375 ? (
             <Mobile colors={list} activeIndex={activeIndex}>
-                <Frame />
+                <Frame type="bottom" />
             </Mobile>
         ) : (
             <Tablet colors={list} activeIndex={activeIndex}>
-                <Frame />
+                <Frame type="bottom" />
             </Tablet>
         );
     } else {
         mainEl = is1024 ? (
             <SmallDesk colors={list} activeIndex={activeIndex}>
-                <Frame />
+                <Frame type="bottom" />
             </SmallDesk>
         ) : (
             <Desk colors={list} activeIndex={activeIndex}>
-                <Frame />
+                <Frame type="bottom" />
             </Desk>
         );
     }
 
-    if (isMobile) {
+    if (mobileStatus) {
         classStr += is375 ? " mobile" : " tablet";
     } else if (is1024) {
         classStr += " small_desk";
